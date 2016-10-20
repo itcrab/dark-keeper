@@ -1,0 +1,9 @@
+beautifulsoup4==4.5.1
+colorama==0.3.7
+cookies==2.2.1
+py==1.4.31
+pytest==3.0.3
+requests==2.11.1
+responses==0.5.1
+six==1.10.0
+XlsxWriter==0.9.3
