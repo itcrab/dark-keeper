@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/itcrab/dark_keeper.svg?branch=master)](https://travis-ci.org/itcrab/dark_keeper)
+[![Code Climate](https://codeclimate.com/github/itcrab/dark_keeper/badges/gpa.svg)](https://codeclimate.com/github/itcrab/dark_keeper)
 
 # Dark Keeper
 Dark Keeper is open source simple web-parser for podcast-sites.
