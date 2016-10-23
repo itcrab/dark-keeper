@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/itcrab/dark_keeper.svg?branch=master)](https://travis-ci.org/itcrab/dark_keeper)
+[![Coverage Status](https://coveralls.io/repos/github/itcrab/dark_keeper/badge.svg?branch=master)](https://coveralls.io/github/itcrab/dark_keeper?branch=master)
 [![Code Climate](https://codeclimate.com/github/itcrab/dark_keeper/badges/gpa.svg)](https://codeclimate.com/github/itcrab/dark_keeper)
 
 # Dark Keeper
