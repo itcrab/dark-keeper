@@ -5,8 +5,16 @@ python:
   - "3.4"
   - "3.5"
 
-install: "pip install -r requirements.txt"
+install:
+  - pip install -r requirements.txt
+  - pip install python-coveralls
+  - pip install pytest-cov
 
-before_script: export PYTHONPATH=$PYTHONPATH:$(pwd)
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-script: py.test
+script:
+  - py.test --cov=dark_keeper
+
+after_success:
+  - coveralls
