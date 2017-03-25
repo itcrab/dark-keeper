@@ -10,7 +10,7 @@ def create_soup(url, request):
     html = request.receive_html(url)
 
     try:
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
     except HTMLParser.HTMLParseError as e:
         raise DarkKeeperParseHTMLError(e)
 
