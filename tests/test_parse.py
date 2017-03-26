@@ -1,5 +1,5 @@
 import responses
-from bs4 import BeautifulSoup
+import lxml.html
 
 from dark_keeper import create_soup
 from dark_keeper.parse import find_urls_in_menu, _base_url_to_main_url, _normalize_url
@@ -23,7 +23,7 @@ def test_create_soup(export_dir, html_for_parse):
 
     soup = create_soup(url, request)
 
-    assert isinstance(soup, BeautifulSoup)
+    assert isinstance(soup, lxml.html.HtmlElement)
 
 
 @responses.activate

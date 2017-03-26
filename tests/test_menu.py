@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+import lxml.html
 
 from dark_keeper.menu import Menu
 
@@ -8,7 +8,7 @@ def test_menu(html_for_menu):
     menus = ['.menu a']
     menu = Menu(url, menus)
 
-    soup = BeautifulSoup(html_for_menu, 'html.parser')
+    soup = lxml.html.fromstring(html_for_menu)
     menu.append_new_urls(soup)
 
 
@@ -17,7 +17,7 @@ def test_menu_unique_urls(html_for_menu):
     menus = ['.menu a']
     menu = Menu(url, menus)
 
-    soup = BeautifulSoup(html_for_menu, 'html.parser')
+    soup = lxml.html.fromstring(html_for_menu)
     for i in range(10):
         menu.append_new_urls(soup)
 

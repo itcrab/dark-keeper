@@ -1,6 +1,6 @@
 import os
 
-from bs4 import BeautifulSoup
+import lxml.html
 
 from dark_keeper.log import get_log
 from dark_keeper.storage import Storage
@@ -18,7 +18,7 @@ def test_storage(export_dir, html_for_storage):
 
     assert storage == [['title', 'desc', 'mp3']]
 
-    soup = BeautifulSoup(html_for_storage, 'html.parser')
+    soup = lxml.html.fromstring(html_for_storage)
     storage.append_row(soup)
 
     assert storage == [
@@ -37,7 +37,7 @@ def test_exports(export_dir, html_for_storage):
         export_dir,
     )
 
-    soup = BeautifulSoup(html_for_storage, 'html.parser')
+    soup = lxml.html.fromstring(html_for_storage)
     storage.append_row(soup)
 
     print('')

@@ -1,7 +1,6 @@
-from html.parser import HTMLParser
 from urllib.parse import urlparse
 
-from bs4 import BeautifulSoup
+import lxml.html
 
 from .exceptions import DarkKeeperParseHTMLError
 
@@ -10,8 +9,8 @@ def create_soup(url, request):
     html = request.receive_html(url)
 
     try:
-        soup = BeautifulSoup(html, 'lxml')
-    except HTMLParser.HTMLParseError as e:
+        soup = lxml.html.fromstring(html)
+    except Exception as e:
         raise DarkKeeperParseHTMLError(e)
 
     return soup
@@ -22,7 +21,7 @@ def find_urls_in_menu(soup, css_menus, base_url):
 
     urls = []
     for menu in css_menus:
-        for link in soup.select(menu):
+        for link in soup.cssselect(menu):
             url = link.get('href')
             if not url:
                 continue
@@ -37,7 +36,7 @@ def find_urls_in_menu(soup, css_menus, base_url):
 def create_new_data_row(soup, model_values):
     row = []
     for field in model_values:
-        tags = soup.select(field)
+        tags = soup.cssselect(field)
 
         string = _tags_to_string(tags)
         if len(string.strip(',').strip()):  # check blank
@@ -60,12 +59,12 @@ def _tags_to_string(tags):
 
 
 def _tag_to_string(tag):
-    if tag.name == 'a':
+    if tag.tag == 'a':
         return tag.get('href')
-    elif tag.name == 'audio':
+    elif tag.tag == 'audio':
         return tag.get('src')
 
-    return tag.get_text().strip()
+    return tag.text_content().strip()
 
 
 def _base_url_to_main_url(url):
