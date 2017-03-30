@@ -1,14 +1,13 @@
 # PyCharm
-/.idea/
+.idea/
 
 # Python
-/.venv/
+.venv/
 __pycache__/
 *.py[cod]
 
 # pytest
-/.cache/
+.cache/
 
 # dark_keeper
-/export/
-/examples/export/
+export/
