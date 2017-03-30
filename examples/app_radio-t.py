@@ -7,14 +7,12 @@ from dark_keeper.request import Request
 from dark_keeper.storage import Storage
 
 export_dir = os.path.join(
-    os.getcwd(), 'export', 'radio-t.com__list'  # path to export directory
+    os.getcwd(), 'export', 'radio-t.com'  # path to export directory
 )
 menu = Menu(
-    'https://radio-t.com/',  # base url
+    'https://radio-t.com/archives/',  # base url
     [
-        '#content .entry-title a',  # css-selectors with menu links
-        '#content .pagination .prev',
-        '#content .pagination .next',
+        '#blog-archives h1 a',  # css-selectors with menu links
     ],
 )
 storage = Storage(

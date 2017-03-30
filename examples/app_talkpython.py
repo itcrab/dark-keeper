@@ -7,22 +7,22 @@ from dark_keeper.request import Request
 from dark_keeper.storage import Storage
 
 export_dir = os.path.join(
-    os.getcwd(), 'export', 'se-radio.net__item'  # path to export directory
+    os.getcwd(), 'export', 'talkpython.fm'  # path to export directory
 )
 menu = Menu(
-    'http://www.se-radio.net/2016/10/se-radio-episode-271-idit-levine-on-unikernelsl/',  # base url
+    'https://talkpython.fm/episodes/all',  # base url
     [
-        '.navigation a',  # css-selectors with menu links
+        '.episodes .table.episodes a',  # css-selectors with menu links
     ],
 )
 storage = Storage(
     [
-        ('title', '.single h1.post-title'),  # col 1
-        ('desc', '.single .entry'),  # col 2
-        ('mp3', '.single .powerpress_link_d'),  # col 3
+        ('title', '.show-episode-page h1'),  # col 1
+        ('desc', '.large-content-text'),  # col 2
+        ('mp3', '.episode-buttons .subscribe-btn'),  # col 3
     ],
     export_dir,
-    3,  # mul for max length of strings in Excel (32767 * 1), if > 1 raise error when open in Excel)
+    1,  # mul for max length of strings in Excel (32767 * 1), if > 1 raise error when open in Excel)
 )
 request = Request(
     [1, 2],  # delay

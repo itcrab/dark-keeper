@@ -7,22 +7,23 @@ from dark_keeper.request import Request
 from dark_keeper.storage import Storage
 
 export_dir = os.path.join(
-    os.getcwd(), 'export', 'radio-t.com__one'  # path to export directory
+    os.getcwd(), 'export', 'se-radio.net'  # path to export directory
 )
 menu = Menu(
-    'https://radio-t.com/archives/',  # base url
+    'http://www.se-radio.net/',  # base url
     [
-        '#blog-archives h1 a',  # css-selectors with menu links
+        '.home .entry .post-title a',  # css-selectors with menu links
+        '.home .navigation a',
     ],
 )
 storage = Storage(
     [
-        ('title', '.hentry .entry-title'),  # col 1
-        ('desc', '.hentry .entry-content'),  # col 2
-        ('mp3', '.hentry audio'),  # col 3
+        ('title', '.single h1.post-title'),  # col 1
+        ('desc', '.single .entry'),  # col 2
+        ('mp3', '.single .powerpress_links_mp3 .powerpress_link_d'),  # col 3
     ],
     export_dir,
-    1,  # mul for max length of strings in Excel (32767 * 1), if > 1 raise error when open in Excel)
+    3,  # mul for max length of strings in Excel (32767 * 1), if > 1 raise error when open in Excel)
 )
 request = Request(
     [1, 2],  # delay
