@@ -5,9 +5,7 @@ import lxml.html
 from .exceptions import DarkKeeperParseHTMLError
 
 
-def create_soup(url, request):
-    html = request.receive_html(url)
-
+def create_soup(html):
     try:
         soup = lxml.html.fromstring(html)
     except Exception as e:

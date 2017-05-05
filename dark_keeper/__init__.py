@@ -22,7 +22,8 @@ class DarkKeeper(object):
 
     def _process(self):
         for index, url in enumerate(self.menu):
-            soup = create_soup(url, self.request)
+            html = self.request.receive_html(url)
+            soup = create_soup(html)
 
             self.menu.append_new_urls(soup)
 

@@ -21,7 +21,8 @@ def test_create_soup(export_dir, html_for_parse):
         'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
     )
 
-    soup = create_soup(url, request)
+    html = request.receive_html(url)
+    soup = create_soup(html)
 
     assert isinstance(soup, lxml.html.HtmlElement)
 
@@ -41,7 +42,8 @@ def test_find_urls_in_menu(export_dir, html_for_parse, urls_for_parse):
         'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
     )
 
-    soup = create_soup(url, request)
+    html = request.receive_html(url)
+    soup = create_soup(html)
     menu = ['.menu li a']
     base_url = url
 
