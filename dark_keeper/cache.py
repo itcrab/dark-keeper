@@ -1,5 +1,5 @@
-import hashlib
 import os
+import re
 
 from .exceptions import DarkKeeperCacheReadError
 from .storage import Storage
@@ -29,9 +29,8 @@ def _get_cache_path(url, export_dir):
     base_path = os.path.join(export_dir, 'cache')
     Storage.create_dirs(base_path)
 
-    cache_file = '{}.html'.format(
-        hashlib.sha256(url.encode('utf-8')).hexdigest()
-    )
+    url = re.sub(r'[:|/|?]', '_', url)
+    cache_file = '{}.html'.format(url)
     cache_path = os.path.join(
         base_path, cache_file
     )
