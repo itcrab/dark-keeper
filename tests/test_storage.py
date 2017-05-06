@@ -1,12 +1,14 @@
 import os
 
 import lxml.html
+from pymongo import MongoClient
 
 from dark_keeper.log import get_log
 from dark_keeper.storage import Storage
 
 
 def test_storage(export_dir, html_for_storage):
+    mongo_client = MongoClient('localhost', 27017)
     storage = Storage(
         [
             ('title', '.show-episode-page h1'),
@@ -14,6 +16,7 @@ def test_storage(export_dir, html_for_storage):
             ('mp3', '.episode-buttons a[href$=".mp3"]'),
         ],
         export_dir,
+        mongo_client,
     )
 
     assert storage == [['title', 'desc', 'mp3']]
@@ -28,6 +31,7 @@ def test_storage(export_dir, html_for_storage):
 
 
 def test_exports(export_dir, html_for_storage):
+    mongo_client = MongoClient('localhost', 27017)
     storage = Storage(
         [
             ('title', '.show-episode-page h1'),
@@ -35,6 +39,7 @@ def test_exports(export_dir, html_for_storage):
             ('mp3', '.episode-buttons a[href$=".mp3"]'),
         ],
         export_dir,
+        mongo_client,
     )
 
     soup = lxml.html.fromstring(html_for_storage)
