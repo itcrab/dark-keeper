@@ -8,7 +8,7 @@ from .parse import create_new_data_row
 
 
 class Storage(list):
-    def __init__(self, model, export_dir, xls_strmax_mul=1):
+    def __init__(self, model, export_dir, mongo_client, xls_strmax_mul=1):
         super().__init__()
 
         self.model = model
@@ -16,6 +16,7 @@ class Storage(list):
         self.model_values = [item[1] for item in model]
 
         self.export_dir = export_dir
+        self.mongo_client = mongo_client
         self.create_dirs(self.export_dir)
 
         self.xls_strmax_mul = xls_strmax_mul
@@ -26,6 +27,10 @@ class Storage(list):
         row = create_new_data_row(soup, self.model_values)
         if row:
             self.append(row)
+
+    def export(self, log):
+        self.export_files(log)
+        self.export_mongo(log)
 
     def export_files(self, log):
         exported_files = []
@@ -39,6 +44,24 @@ class Storage(list):
             exported_files.append(export_file)
 
         return exported_files
+
+    def export_mongo(self, log):
+        coll_name = os.path.basename(self.export_dir)
+        log.info('- generating {} collection...'.format(coll_name))
+
+        db = self.mongo_client.podcasts
+
+        coll = getattr(db, coll_name)
+        if coll.count():
+            coll.drop()
+
+        for row, data in enumerate(self):
+            if not row:
+                continue
+
+            coll.insert_one(
+                dict(zip(self.model_keys, data))
+            )
 
     def _export_to_csv(self, export_file):
         # fix for Excel and utf8

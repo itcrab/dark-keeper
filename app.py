@@ -1,5 +1,7 @@
 import os
 
+from pymongo import MongoClient
+
 from dark_keeper import DarkKeeper
 from dark_keeper.log import get_log
 from dark_keeper.menu import Menu
@@ -16,6 +18,8 @@ menu = Menu(
         '.list-page .navigation a',
     ],
 )
+
+mongo_client = MongoClient('localhost', 27017)
 storage = Storage(
     [
         ('title', '.item-page .podcast h1.title'),  # col 1
@@ -23,6 +27,7 @@ storage = Storage(
         ('mp3', '.item-page .podcast .mp3 a'),  # col 3
     ],
     export_dir,
+    mongo_client,
     3,  # mul for max length of row-string in Excel (3 * 32767)
 )
 request = Request(

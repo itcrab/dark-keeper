@@ -33,4 +33,4 @@ class DarkKeeper(object):
                 index=index, url=url
             ))
 
-        self.storage.export_files(self.log)
+        self.storage.export(self.log)
