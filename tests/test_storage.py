@@ -56,6 +56,17 @@ def test_exports(export_dir, html_for_storage):
 title one,desc one,/mp3/podcast_0.mp3
 '''
 
+    db_name = 'podcasts_tests'
+    coll_name = storage.export_mongo(get_log(), db_name)
+
+    db = getattr(mongo_client, db_name)
+    coll = getattr(db, coll_name)
+
+    data = coll.find_one()
+    data.pop('_id', None)
+
+    assert {'desc': 'desc one', 'mp3': '/mp3/podcast_0.mp3', 'title': 'title one'} == data
+
 
 def test_create_dirs(export_dir):
     dirs = [

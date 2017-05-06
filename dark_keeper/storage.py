@@ -45,11 +45,11 @@ class Storage(list):
 
         return exported_files
 
-    def export_mongo(self, log):
+    def export_mongo(self, log, db_name='podcasts'):
         coll_name = os.path.basename(self.export_dir)
         log.info('- generating {} collection...'.format(coll_name))
 
-        db = self.mongo_client.podcasts
+        db = getattr(self.mongo_client, db_name)
 
         coll = getattr(db, coll_name)
         if coll.count():
@@ -62,6 +62,8 @@ class Storage(list):
             coll.insert_one(
                 dict(zip(self.model_keys, data))
             )
+
+        return coll_name
 
     def _export_to_csv(self, export_file):
         # fix for Excel and utf8
