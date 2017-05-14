@@ -19,15 +19,17 @@ menu = Menu(
 )
 
 mongo_client = MongoClient('localhost', 27017)
+db_name = 'podcasts'
+coll_name = os.path.basename(export_dir)
 storage = Storage(
     [
         ('title', '.show-episode-page h1'),  # col 1
         ('desc', '.large-content-text'),  # col 2
         ('mp3', '.episode-buttons .subscribe-btn'),  # col 3
     ],
-    export_dir,
+    db_name,
+    coll_name,
     mongo_client,
-    1,  # mul for max length of strings in Excel (32767 * 1), if > 1 raise error when open in Excel)
 )
 request = Request(
     [1, 2],  # delay

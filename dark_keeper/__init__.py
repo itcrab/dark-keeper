@@ -16,9 +16,13 @@ class DarkKeeper(object):
 
         self._process()
 
-        self.log.info('Process is finished! Check results in: {}'.format(
-            self.storage.export_dir
-        ))
+        self.log.info(
+            'Process is finished - check results in MongoDB!\n'
+            'database: {db_name}, collection: {coll_name}'.format(
+                db_name=self.storage.db_name,
+                coll_name=self.storage.coll_name
+            )
+        )
 
     def _process(self):
         for index, url in enumerate(self.menu):
@@ -33,4 +37,4 @@ class DarkKeeper(object):
                 index=index, url=url
             ))
 
-        self.storage.export(self.log)
+        self.storage.export_mongo(self.log)

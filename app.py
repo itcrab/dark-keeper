@@ -9,26 +9,27 @@ from dark_keeper.request import Request
 from dark_keeper.storage import Storage
 
 export_dir = os.path.join(
-    os.getcwd(), 'export', 'it-podcast.com'  # path to export directory
+    os.getcwd(), 'export', 'radio-t.com'  # path to export directory
 )
 menu = Menu(
-    'https://it-podcast.com/',  # base url
+    'https://radio-t.com/archives/',  # base url
     [
-        '.list-page .entry .title a',  # css-selectors with menu links
-        '.list-page .navigation a',
+        '#blog-archives h1 a',  # css-selectors with menu links
     ],
 )
 
 mongo_client = MongoClient('localhost', 27017)
+db_name = 'podcasts'
+coll_name = os.path.basename(export_dir)
 storage = Storage(
     [
-        ('title', '.item-page .podcast h1.title'),  # col 1
-        ('desc', '.item-page .podcast .decription'),  # col 2
-        ('mp3', '.item-page .podcast .mp3 a'),  # col 3
+        ('title', '.hentry .entry-title'),  # col 1
+        ('desc', '.hentry .entry-content'),  # col 2
+        ('mp3', '.hentry audio'),  # col 3
     ],
-    export_dir,
+    db_name,
+    coll_name,
     mongo_client,
-    3,  # mul for max length of row-string in Excel (3 * 32767)
 )
 request = Request(
     [1, 2],  # delay

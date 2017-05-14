@@ -1,12 +1,12 @@
 import logging
 import os
 
-from .storage import Storage
+from dark_keeper.storage import create_dirs
 
 
 def get_log(log_format='%(asctime)s %(message)s', log_file=None):
     if log_file:
-        Storage.create_dirs(os.path.dirname(log_file))
+        create_dirs(os.path.dirname(log_file))
 
     log = logging.getLogger(__name__)
     log.setLevel(logging.DEBUG)

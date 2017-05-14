@@ -1,8 +1,8 @@
 import os
 import re
 
+from dark_keeper.storage import create_dirs
 from .exceptions import DarkKeeperCacheReadError
-from .storage import Storage
 
 
 def from_cache(url, export_dir):
@@ -27,7 +27,7 @@ def to_cache(url, export_dir, html):
 
 def _get_cache_path(url, export_dir):
     base_path = os.path.join(export_dir, 'cache')
-    Storage.create_dirs(base_path)
+    create_dirs(base_path)
 
     url = re.sub(r'[:|/|?]', '_', url)
     cache_file = '{}.html'.format(url)
