@@ -35,7 +35,7 @@ def test_storage(export_dir, html_for_storage):
 
 def test_exports(export_dir, html_for_storage):
     mongo_client = MongoClient('localhost', 27017)
-    db_name = 'podcasts'
+    db_name = 'podcasts_tests'
     coll_name = os.path.basename(export_dir)
     storage = Storage(
         [
@@ -51,7 +51,6 @@ def test_exports(export_dir, html_for_storage):
     soup = lxml.html.fromstring(html_for_storage)
     storage.append_row(soup)
 
-    db_name = 'podcasts_tests'
     coll_name = storage.export_mongo(get_log())
 
     db = getattr(mongo_client, db_name)
