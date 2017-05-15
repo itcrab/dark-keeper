@@ -30,6 +30,8 @@ Example by abstract IT-podcast site :: $ cat app.py
 ```python
 import os
 
+from pymongo import MongoClient
+
 from dark_keeper import DarkKeeper
 from dark_keeper.log import get_log
 from dark_keeper.menu import Menu
@@ -46,14 +48,19 @@ menu = Menu(
         '.list-page .navigation a',
     ],
 )
+
+mongo_client = MongoClient('localhost', 27017)
+db_name = 'podcasts'
+coll_name = os.path.basename(export_dir)
 storage = Storage(
     [
         ('title', '.item-page .podcast h1.title'),  # col 1
         ('desc', '.item-page .podcast .decription'),  # col 2
         ('mp3', '.item-page .podcast .mp3 a'),  # col 3
     ],
-    export_dir,
-    3,  # mul for max length of row-string in Excel (3 * 32767)
+    db_name,
+    coll_name,
+    mongo_client,
 )
 request = Request(
     [1, 2],  # delay
