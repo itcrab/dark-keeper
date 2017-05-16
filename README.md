@@ -7,21 +7,14 @@ Dark Keeper is open source simple web-parser for podcast-sites.
 
 # Goal idea
 I like listen IT-podcasts and learn something new.
-Sometimes when I found new really good podcast I want download all episodes and start listen from first episode to now.
-It born goal idea - create simple tool for this task.
+For really good podcasts I want download all episodes.
+Goal idea is create simple tool for this.
 
 # Features
-* search and storage all links to pages with episode of podcast
-* download all found pages and creating cache (in next time will not be downloaded)
-* parse all needed information from pages - you may create some cols
-* export in two formats - csv and xlsx
-* simple to using
-
-# Algorithm
-I have three algorithms usages:
-* `list page`: list page with list of episodes and pagination pages links
-* `item page`: item page with current opened episode and links to preview/forward episodes
-* `one page`: one page with links to all episodes
+- [x] search and storage all links to pages with episodes
+- [x] download all found pages and creating cache (in next time will not be downloaded)
+- [x] parse all needed information from pages - you may create some columns
+- [x] export data to MongoDB
 
 # Quick start
 Some examples for real podcast sites you may see in `examples` directory.
