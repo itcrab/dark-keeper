@@ -1,20 +1,27 @@
-import logging
 import os
 
-from dark_keeper.log import get_log
+from pymongo import MongoClient
+
+from dark_keeper.log import Logger
 
 
-def test_get_log(log_format):
-    log = get_log(log_format)
+def test_logger_export_mongo(export_dir):
+    mongo_client = MongoClient('localhost', 27017)
+    db_name = 'podcasts_tests'
+    coll_name = os.path.basename(export_dir)
 
-    assert isinstance(log, logging.Logger)
+    message = 'test message for collection {}'.format(coll_name)
+    log = Logger(
+        db_name,
+        coll_name,
+        mongo_client,
+    )
+    log.info(message)
 
+    db = getattr(mongo_client, db_name)
 
-def test_get_log_with_file(log_files, log_format):
-    for log_file in log_files:
-        log = get_log(log_format, log_file)
+    coll = getattr(db, '{}_log'.format(coll_name))
+    log_message = coll.find_one()
 
-        assert isinstance(log, logging.Logger)
-
-        if log_file:
-            assert os.path.isfile(log_file)
+    assert log_message['level'] == 'info'
+    assert log_message['message'] == message

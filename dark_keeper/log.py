@@ -1,28 +1,33 @@
-import logging
-import os
-
-from dark_keeper.storage import create_dirs
+import datetime
 
 
-def get_log(log_format='%(asctime)s %(message)s', log_file=None):
-    if log_file:
-        create_dirs(os.path.dirname(log_file))
+class Logger(object):
+    def __init__(self, db_name, coll_name, mongo_client):
+        self.db_name = db_name
+        self.coll_name = '{}_log'.format(coll_name)
+        self.mongo_client = mongo_client
 
-    log = logging.getLogger(__name__)
-    log.setLevel(logging.DEBUG)
+        self.coll = self._get_mongo_collection()
 
-    formatter = logging.Formatter(log_format)
+    def info(self, msg):
+        created = datetime.datetime.now()
 
-    # fix double output
-    log.handlers = []
+        print('{} {}'.format(created, msg))
 
-    if log_file:
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(formatter)
-        log.addHandler(file_handler)
+        self.export_mongo('info', msg, created)
 
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(formatter)
-    log.addHandler(stream_handler)
+    def export_mongo(self, level, msg, created):
+        self.coll.insert_one({
+            'level': level,
+            'message': msg,
+            'created': created
+        })
 
-    return log
+    def _get_mongo_collection(self):
+        db = getattr(self.mongo_client, self.db_name)
+
+        coll = getattr(db, self.coll_name)
+        if coll.count():
+            coll.drop()
+
+        return getattr(db, self.coll_name)

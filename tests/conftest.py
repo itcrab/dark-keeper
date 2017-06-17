@@ -6,6 +6,6 @@ sys.path.append(
 )
 
 pytest_plugins = [
-    'fixtures_cache', 'fixtures_log', 'fixtures_menu', 'fixtures_parse',
+    'fixtures_cache', 'fixtures_menu', 'fixtures_parse',
     'fixtures_request', 'fixtures_storage'
 ]

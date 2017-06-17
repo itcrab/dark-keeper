@@ -3,7 +3,7 @@ import os
 from pymongo import MongoClient
 
 from dark_keeper import DarkKeeper
-from dark_keeper.log import get_log
+from dark_keeper.log import Logger
 from dark_keeper.menu import Menu
 from dark_keeper.request import Request
 from dark_keeper.storage import Storage
@@ -39,9 +39,10 @@ request = Request(
     'AppleWebKit/537.36 (KHTML, like Gecko) '
     'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
 )
-log = get_log(
-    '%(asctime)s %(message)s',  # log format
-    os.path.join(export_dir, 'export.log'),  # log file
+log = Logger(
+    db_name,
+    coll_name,
+    mongo_client,
 )
 
 dk = DarkKeeper(

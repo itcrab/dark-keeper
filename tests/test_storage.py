@@ -3,7 +3,7 @@ import os
 import lxml.html
 from pymongo import MongoClient
 
-from dark_keeper.log import get_log
+from dark_keeper.log import Logger
 from dark_keeper.storage import Storage, create_dirs
 
 
@@ -51,7 +51,12 @@ def test_exports(export_dir, html_for_storage):
     soup = lxml.html.fromstring(html_for_storage)
     storage.append_row(soup)
 
-    coll_name = storage.export_mongo(get_log())
+    log = Logger(
+        db_name,
+        coll_name,
+        mongo_client,
+    )
+    coll_name = storage.export_mongo(log)
 
     db = getattr(mongo_client, db_name)
     coll = getattr(db, coll_name)
