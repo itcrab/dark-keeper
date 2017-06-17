@@ -15,8 +15,6 @@ class Storage(list):
         self.coll_name = coll_name
         self.mongo_client = mongo_client
 
-        self._set_head_row()
-
     def append_row(self, soup):
         row = create_new_data_row(soup, self.model_values)
         if row:
@@ -31,21 +29,12 @@ class Storage(list):
         if coll.count():
             coll.drop()
 
-        for row, data in enumerate(self):
-            if not row:
-                continue
-
+        for data in self:
             coll.insert_one(
                 dict(zip(self.model_keys, data))
             )
 
         return self.coll_name
-
-    def _set_head_row(self):
-        if len(self) == 0:
-            self.append(self.model_keys)
-        else:
-            self[0] = self.model_keys
 
 
 def create_dirs(export_dir):

@@ -22,14 +22,11 @@ def test_storage(export_dir, html_for_storage):
         mongo_client,
     )
 
-    assert storage == [['title', 'desc', 'mp3']]
-
     soup = lxml.html.fromstring(html_for_storage)
     storage.append_row(soup)
 
     assert storage == [
-        ['title', 'desc', 'mp3'],
-        ['title one', 'desc one', '/mp3/podcast_0.mp3'],
+        ['title one', 'desc one', '/mp3/podcast_0.mp3']
     ]
 
 
