@@ -5,8 +5,8 @@ from dark_keeper.storage import create_dirs
 from .exceptions import DarkKeeperCacheReadError
 
 
-def from_cache(url, export_dir):
-    cache_path = _get_cache_path(url, export_dir)
+def from_cache(url, cache_dir):
+    cache_path = _get_cache_path(url, cache_dir)
     if os.path.isfile(cache_path):
         with open(cache_path, 'rb') as f:
             try:
@@ -17,22 +17,21 @@ def from_cache(url, export_dir):
             return html
 
 
-def to_cache(url, export_dir, html):
-    cache_path = _get_cache_path(url, export_dir)
+def to_cache(url, cache_dir, html):
+    cache_path = _get_cache_path(url, cache_dir)
     with open(cache_path, 'wb') as f:
         f.write(html)
 
     return cache_path
 
 
-def _get_cache_path(url, export_dir):
-    base_path = os.path.join(export_dir, 'cache')
-    create_dirs(base_path)
+def _get_cache_path(url, cache_dir):
+    create_dirs(cache_dir)
 
     url = re.sub(r'[:|/|?]', '_', url)
     cache_file = '{}.html'.format(url)
     cache_path = os.path.join(
-        base_path, cache_file
+        cache_dir, cache_file
     )
 
     return cache_path

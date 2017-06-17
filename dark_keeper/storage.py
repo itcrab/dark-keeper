@@ -37,8 +37,8 @@ class Storage(list):
         return self.coll_name
 
 
-def create_dirs(export_dir):
-    if export_dir and not os.path.isdir(export_dir):
-        os.makedirs(export_dir, exist_ok=True)
+def create_dirs(cache_dir):
+    if cache_dir and not os.path.isdir(cache_dir):
+        os.makedirs(cache_dir, exist_ok=True)
 
         return True

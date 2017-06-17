@@ -7,7 +7,7 @@ from dark_keeper.request import Request
 
 
 @responses.activate
-def test_create_soup(export_dir, html_for_parse):
+def test_create_soup(cache_dir, html_for_parse):
     url = 'https://talkpython.fm.mock/episodes/all'
     responses.add(responses.GET, url,
                   body=html_for_parse, status=200,
@@ -15,7 +15,7 @@ def test_create_soup(export_dir, html_for_parse):
 
     request = Request(
         [1, 2],
-        export_dir,
+        cache_dir,
         'Mozilla/5.0 (Windows NT 10.0; WOW64) '
         'AppleWebKit/537.36 (KHTML, like Gecko) '
         'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
@@ -28,7 +28,7 @@ def test_create_soup(export_dir, html_for_parse):
 
 
 @responses.activate
-def test_find_urls_in_menu(export_dir, html_for_parse, urls_for_parse):
+def test_find_urls_in_menu(cache_dir, html_for_parse, urls_for_parse):
     url = 'https://talkpython.fm.mock/episodes/all'
     responses.add(responses.GET, url,
                   body=html_for_parse, status=200,
@@ -36,7 +36,7 @@ def test_find_urls_in_menu(export_dir, html_for_parse, urls_for_parse):
 
     request = Request(
         [1, 2],
-        export_dir,
+        cache_dir,
         'Mozilla/5.0 (Windows NT 10.0; WOW64) '
         'AppleWebKit/537.36 (KHTML, like Gecko) '
         'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',

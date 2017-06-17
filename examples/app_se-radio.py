@@ -8,8 +8,8 @@ from dark_keeper.menu import Menu
 from dark_keeper.request import Request
 from dark_keeper.storage import Storage
 
-export_dir = os.path.join(
-    os.getcwd(), 'export', 'se-radio.net'  # path to export directory
+cache_dir = os.path.join(
+    os.getcwd(), 'cache', 'se-radio.net'  # path to export directory
 )
 menu = Menu(
     'http://www.se-radio.net/',  # base url
@@ -21,7 +21,7 @@ menu = Menu(
 
 mongo_client = MongoClient('localhost', 27017)
 db_name = 'podcasts'
-coll_name = os.path.basename(export_dir)
+coll_name = os.path.basename(cache_dir)
 storage = Storage(
     [
         ('title', '.single h1.post-title'),  # col 1
@@ -34,7 +34,7 @@ storage = Storage(
 )
 request = Request(
     [1, 2],  # delay
-    export_dir,
+    cache_dir,
     'Mozilla/5.0 (Windows NT 10.0; WOW64) '  # user-agent
     'AppleWebKit/537.36 (KHTML, like Gecko) '
     'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',

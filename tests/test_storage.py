@@ -7,10 +7,10 @@ from dark_keeper.log import Logger
 from dark_keeper.storage import Storage, create_dirs
 
 
-def test_storage(export_dir, html_for_storage):
+def test_storage(cache_dir, html_for_storage):
     mongo_client = MongoClient('localhost', 27017)
     db_name = 'podcasts'
-    coll_name = os.path.basename(export_dir)
+    coll_name = os.path.basename(cache_dir)
     storage = Storage(
         [
             ('title', '.show-episode-page h1'),
@@ -30,10 +30,10 @@ def test_storage(export_dir, html_for_storage):
     ]
 
 
-def test_exports(export_dir, html_for_storage):
+def test_exports(cache_dir, html_for_storage):
     mongo_client = MongoClient('localhost', 27017)
     db_name = 'podcasts_tests'
-    coll_name = os.path.basename(export_dir)
+    coll_name = os.path.basename(cache_dir)
     storage = Storage(
         [
             ('title', '.show-episode-page h1'),
@@ -64,12 +64,12 @@ def test_exports(export_dir, html_for_storage):
     assert {'desc': 'desc one', 'mp3': '/mp3/podcast_0.mp3', 'title': 'title one'} == data
 
 
-def test_create_dirs(export_dir):
+def test_create_dirs(cache_dir):
     dirs = [
         '',
-        os.path.join(export_dir, 'export'),
-        os.path.join(export_dir, 'export_two'),
-        os.path.join(export_dir, 'export_level_one', 'export_level_two'),
+        os.path.join(cache_dir, 'export'),
+        os.path.join(cache_dir, 'export_two'),
+        os.path.join(cache_dir, 'export_level_one', 'export_level_two'),
     ]
     for dir in dirs:
         is_created = create_dirs(dir)

@@ -4,7 +4,7 @@ import pytest
 
 
 @pytest.fixture
-def export_dir(tmpdir):
+def cache_dir(tmpdir):
     return str(tmpdir)
 
 
@@ -33,7 +33,7 @@ def html_for_cache():
 
 @pytest.fixture
 def urls(tmpdir):
-    base_path = os.path.join(str(tmpdir), 'cache')
+    base_path = os.path.join(str(tmpdir))
     return {
         'https://talkpython.fm/episodes/show/79/beeware-python-tools':
             os.path.join(

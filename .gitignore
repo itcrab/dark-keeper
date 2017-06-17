@@ -13,4 +13,4 @@ __pycache__/
 .cache/
 
 # dark_keeper
-export/
+cache/
