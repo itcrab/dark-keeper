@@ -1,4 +1,5 @@
 import datetime
+from collections import OrderedDict
 
 
 class Logger(object):
@@ -17,11 +18,11 @@ class Logger(object):
         self.export_mongo('info', msg, created)
 
     def export_mongo(self, level, msg, created):
-        self.coll.insert_one({
-            'level': level,
-            'message': msg,
-            'created': created
-        })
+        self.coll.insert_one(OrderedDict([
+            ('level', level),
+            ('message', msg),
+            ('created', created)
+        ]))
 
     def _get_mongo_collection(self):
         db = getattr(self.mongo_client, self.db_name)

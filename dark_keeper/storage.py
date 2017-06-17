@@ -8,15 +8,13 @@ class Storage(list):
         super().__init__()
 
         self.model = model
-        self.model_keys = [item[0] for item in model]
-        self.model_values = [item[1] for item in model]
 
         self.db_name = db_name
         self.coll_name = coll_name
         self.mongo_client = mongo_client
 
     def append_row(self, soup):
-        row = create_new_data_row(soup, self.model_values)
+        row = create_new_data_row(soup, self.model)
         if row:
             self.append(row)
 
@@ -29,10 +27,8 @@ class Storage(list):
         if coll.count():
             coll.drop()
 
-        for data in self:
-            coll.insert_one(
-                dict(zip(self.model_keys, data))
-            )
+        for row in self:
+            coll.insert_one(row)
 
         return self.coll_name
 

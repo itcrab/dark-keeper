@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from urllib.parse import urlparse
 
 import lxml.html
@@ -31,14 +32,16 @@ def find_urls_in_menu(soup, css_menus, base_url):
     return urls
 
 
-def create_new_data_row(soup, model_values):
-    row = []
-    for field in model_values:
-        tags = soup.cssselect(field)
+def create_new_data_row(soup, model):
+    row = OrderedDict([])
+    for field in model.items():
+        tags = soup.cssselect(field[1])
 
         string = _tags_to_string(tags)
         if len(string.strip(',').strip()):  # check blank
-            row.append(string)
+            row.update({
+                field[0]: string
+            })
 
     return row
 

@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 import lxml.html
 from pymongo import MongoClient
@@ -12,11 +13,11 @@ def test_storage(cache_dir, html_for_storage):
     db_name = 'podcasts'
     coll_name = os.path.basename(cache_dir)
     storage = Storage(
-        [
+        OrderedDict([
             ('title', '.show-episode-page h1'),
             ('desc', '.large-content-text'),
             ('mp3', '.episode-buttons a[href$=".mp3"]'),
-        ],
+        ]),
         db_name,
         coll_name,
         mongo_client,
@@ -26,7 +27,11 @@ def test_storage(cache_dir, html_for_storage):
     storage.append_row(soup)
 
     assert storage == [
-        ['title one', 'desc one', '/mp3/podcast_0.mp3']
+        OrderedDict([
+            ('title', 'title one'),
+            ('desc', 'desc one'),
+            ('mp3', '/mp3/podcast_0.mp3')
+        ])
     ]
 
 
@@ -35,11 +40,11 @@ def test_exports(cache_dir, html_for_storage):
     db_name = 'podcasts_tests'
     coll_name = os.path.basename(cache_dir)
     storage = Storage(
-        [
+        OrderedDict([
             ('title', '.show-episode-page h1'),
             ('desc', '.large-content-text'),
             ('mp3', '.episode-buttons a[href$=".mp3"]'),
-        ],
+        ]),
         db_name,
         coll_name,
         mongo_client,

@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 from pymongo import MongoClient
 
@@ -22,11 +23,11 @@ mongo_client = MongoClient('localhost', 27017)
 db_name = 'podcasts'
 coll_name = os.path.basename(cache_dir)
 storage = Storage(
-    [
+    OrderedDict([
         ('title', '.hentry .entry-title'),  # col 1
         ('desc', '.hentry .entry-content'),  # col 2
         ('mp3', '.hentry audio'),  # col 3
-    ],
+    ]),
     db_name,
     coll_name,
     mongo_client,
