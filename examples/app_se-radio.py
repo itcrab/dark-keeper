@@ -4,18 +4,16 @@ from collections import OrderedDict
 from pymongo import MongoClient
 
 from dark_keeper import DarkKeeper
-from dark_keeper.menu import Menu
 
 cache_dir = os.path.join(
     os.getcwd(), 'cache', 'se-radio.net'  # path to export directory
 )
-menu = Menu(
-    'http://www.se-radio.net/',  # base url
-    [
-        '.home .entry .post-title a',  # css-selectors with menu links
-        '.home .navigation a',
-    ],
-)
+base_url = 'http://www.se-radio.net/'
+
+menu_model = [
+    '.home .entry .post-title a',  # css-selectors with menu links
+    '.home .navigation a',
+]
 
 model = OrderedDict([
     ('title', '.single h1.post-title'),  # col 1
@@ -28,7 +26,7 @@ db_name = 'podcasts'
 coll_name = os.path.basename(cache_dir)
 
 dk = DarkKeeper(
-    menu, model, cache_dir,  # create DarkKeeper
+    base_url, menu_model, model, cache_dir,  # create DarkKeeper
     db_name, coll_name, mongo_client
 )
 dk.run()  # run process
