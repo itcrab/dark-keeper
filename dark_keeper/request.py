@@ -1,10 +1,10 @@
 import random
-
-import requests
 import time
 
-from .exceptions import DarkKeeperRequestResponseError
+import requests
+
 from .cache import from_cache, to_cache
+from .exceptions import DarkKeeperRequestResponseError
 
 
 class Request(object):

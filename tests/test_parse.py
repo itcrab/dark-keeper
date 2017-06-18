@@ -1,8 +1,7 @@
-import responses
 import lxml.html
+import responses
 
-from dark_keeper import create_soup
-from dark_keeper.parse import find_urls_in_menu, _base_url_to_main_url, _normalize_url
+from dark_keeper.parse import create_soup, find_urls_in_menu, _base_url_to_main_url, _normalize_url
 from dark_keeper.request import Request
 
 

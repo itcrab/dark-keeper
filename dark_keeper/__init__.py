@@ -1,10 +1,10 @@
 import os
 
-from dark_keeper.log import Logger
-from dark_keeper.menu import Menu
-from dark_keeper.request import Request
-from dark_keeper.storage import Storage
+from .log import Logger
+from .menu import Menu
 from .parse import create_soup
+from .request import Request
+from .storage import Storage
 
 
 class DarkKeeper(object):

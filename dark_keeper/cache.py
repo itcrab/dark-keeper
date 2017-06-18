@@ -1,8 +1,8 @@
 import os
 import re
 
-from dark_keeper.storage import create_dirs
 from .exceptions import DarkKeeperCacheReadError
+from .storage import create_dirs
 
 
 def from_cache(url, cache_dir):
