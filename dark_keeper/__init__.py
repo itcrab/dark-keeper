@@ -1,4 +1,5 @@
 from dark_keeper.log import Logger
+from dark_keeper.request import Request
 from .parse import create_soup
 
 
@@ -6,11 +7,17 @@ class DarkKeeper(object):
     """
     Dark Keeper is simple web-parser for podcast-sites.
     """
-    def __init__(self, menu, storage, request,
+    def __init__(self, menu, storage, cache_dir,
                  db_name, coll_name, mongo_client):
         self.menu = menu
         self.storage = storage
-        self.request = request
+        self.request = Request(
+            [1, 2],  # delay
+            cache_dir,
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) '  # user-agent
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
+        )
         self.log = Logger(
             db_name,
             coll_name,
