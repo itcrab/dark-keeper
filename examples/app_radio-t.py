@@ -1,14 +1,12 @@
-import os
 from collections import OrderedDict
+from urllib.parse import urlparse
 
 from pymongo import MongoClient
 
 from dark_keeper import DarkKeeper
 
-cache_dir = os.path.join(
-    os.getcwd(), 'cache', 'radio-t.com'  # path to export directory
-)
 base_url = 'https://radio-t.com/archives/'
+domain = urlparse(base_url).netloc
 
 menu_model = [
     '#blog-archives h1 a',  # css-selectors with menu links
@@ -21,10 +19,10 @@ model = OrderedDict([
 
 mongo_client = MongoClient('localhost', 27017)
 db_name = 'podcasts'
-coll_name = os.path.basename(cache_dir)
+coll_name = domain
 
 dk = DarkKeeper(
-    base_url, menu_model, model, cache_dir,  # create DarkKeeper
+    base_url, menu_model, model, domain,  # create DarkKeeper
     db_name, coll_name, mongo_client
 )
 dk.run()  # run process

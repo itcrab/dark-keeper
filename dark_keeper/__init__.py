@@ -1,3 +1,5 @@
+import os
+
 from dark_keeper.log import Logger
 from dark_keeper.menu import Menu
 from dark_keeper.request import Request
@@ -9,7 +11,7 @@ class DarkKeeper(object):
     """
     Dark Keeper is simple web-parser for podcast-sites.
     """
-    def __init__(self, base_url, menu_model, model, cache_dir,
+    def __init__(self, base_url, menu_model, model, domain,
                  db_name, coll_name, mongo_client):
         self.menu = Menu(
             base_url,
@@ -23,7 +25,9 @@ class DarkKeeper(object):
         )
         self.request = Request(
             [1, 2],  # delay
-            cache_dir,
+            os.path.join(
+                os.getcwd(), 'cache', domain  # cache directory
+            ),
             'Mozilla/5.0 (Windows NT 10.0; WOW64) '  # user-agent
             'AppleWebKit/537.36 (KHTML, like Gecko) '
             'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
@@ -33,7 +37,6 @@ class DarkKeeper(object):
             coll_name,
             mongo_client
         )
-
 
     def run(self):
         self.log.info('Process is started.')

@@ -21,17 +21,15 @@ Some examples for real podcast sites you may see in `examples` directory.
 
 Example by abstract IT-podcast site :: $ cat app.py
 ```python
-import os
 from collections import OrderedDict
+from urllib.parse import urlparse
 
 from pymongo import MongoClient
 
 from dark_keeper import DarkKeeper
 
-cache_dir = os.path.join(
-    os.getcwd(), 'cache', 'it-podcast.com'  # path to export directory
-)
 base_url = 'https://it-podcast.com/'
+domain = urlparse(base_url).netloc
 
 menu_model = [
     '.list-page .entry .title a',  # css-selectors with menu links
@@ -45,10 +43,10 @@ model = OrderedDict([
 
 mongo_client = MongoClient('localhost', 27017)
 db_name = 'podcasts'
-coll_name = os.path.basename(cache_dir)
+coll_name = domain
 
 dk = DarkKeeper(
-    base_url, menu_model, model, cache_dir,  # create DarkKeeper
+    base_url, menu_model, model, domain,  # create DarkKeeper
     db_name, coll_name, mongo_client
 )
 dk.run()  # run process
