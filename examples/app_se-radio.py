@@ -4,31 +4,21 @@ from pymongo import MongoClient
 
 from dark_keeper import DarkKeeper
 
-base_url = 'http://www.se-radio.net/'
-
-menu_model = [
-    '.home .entry .post-title a',  # css-selectors with menu links
-    '.home .navigation a',
-]
-
-model = OrderedDict([
-    ('title', '.single h1.post-title'),  # col 1
-    ('desc', '.single .entry'),  # col 2
-    ('mp3', '.single .powerpress_links_mp3 .powerpress_link_d'),  # col 3
-])
-
-mongo_client = MongoClient('localhost', 27017)
-db_name = 'podcasts'
-coll_name = 'www.se-radio.net'
-
 
 class PodcastKeeper(DarkKeeper):
-    base_url = base_url
-    menu_model = menu_model
-    model = model
-    db_name = db_name
-    coll_name = coll_name
-    mongo_client = mongo_client
+    base_url = 'http://www.se-radio.net/'
+    menu_model = [
+        '.home .entry .post-title a',  # css-selectors with menu links
+        '.home .navigation a',
+    ]
+    model = OrderedDict([
+        ('title', '.single h1.post-title'),  # col 1
+        ('desc', '.single .entry'),  # col 2
+        ('mp3', '.single .powerpress_links_mp3 .powerpress_link_d'),  # col 3
+    ])
+    db_name = 'podcasts'
+    coll_name = 'www.se-radio.net'
+    mongo_client = MongoClient('localhost', 27017)
 
     def parse_menu(self, content):
         self.menu.append_new_urls(content)
