@@ -1,5 +1,6 @@
 import os
 import re
+from urllib.parse import urlparse
 
 from .exceptions import DarkKeeperCacheReadError
 from .storage import create_dirs
@@ -23,6 +24,14 @@ def to_cache(url, cache_dir, html):
         f.write(html)
 
     return cache_path
+
+
+def get_cache_dir(base_url):
+    domain = urlparse(base_url).netloc
+
+    return os.path.join(
+        os.getcwd(), 'cache', domain
+    )
 
 
 def _get_cache_path(url, cache_dir):

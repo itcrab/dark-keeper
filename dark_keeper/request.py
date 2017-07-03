@@ -1,19 +1,16 @@
-import os
 import random
 import time
 
 import requests
 
-from .cache import from_cache, to_cache
+from .cache import from_cache, to_cache, get_cache_dir
 from .exceptions import DarkKeeperRequestResponseError
 
 
 class Request(object):
-    def __init__(self, delay, domain, user_agent=None):
+    def __init__(self, delay, base_url, user_agent=None):
         self.delay = delay if isinstance(delay, list) and len(delay) == 2 else [1, 2]
-        self.cache_dir = os.path.join(
-            os.getcwd(), 'cache', domain
-        )
+        self.cache_dir = get_cache_dir(base_url)
 
         self.headers = None
         if user_agent:
