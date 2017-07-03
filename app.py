@@ -22,8 +22,23 @@ mongo_client = MongoClient('localhost', 27017)
 db_name = 'podcasts'
 coll_name = domain
 
-dk = DarkKeeper(
-    base_url, menu_model, model, domain,  # create DarkKeeper
-    db_name, coll_name, mongo_client
-)
-dk.run()  # run process
+
+class PodcastKeeper(DarkKeeper):
+    base_url = base_url
+    menu_model = menu_model
+    model = model
+    domain = domain
+    db_name = db_name
+    coll_name = coll_name
+    mongo_client = mongo_client
+
+    def parse_menu(self, content):
+        self.menu.append_new_urls(content)
+
+    def parse_content(self, content):
+        self.storage.append_row(content)
+
+
+if __name__ == '__main__':
+    pk = PodcastKeeper()
+    pk.run()

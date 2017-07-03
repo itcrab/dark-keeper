@@ -3,16 +3,16 @@ from urllib.parse import urlparse
 
 import lxml.html
 
-from .exceptions import DarkKeeperParseHTMLError
+from .exceptions import DarkKeeperParseContentError
 
 
-def create_soup(html):
+def create_content(html):
     try:
-        soup = lxml.html.fromstring(html)
+        content = lxml.html.fromstring(html)
     except Exception as e:
-        raise DarkKeeperParseHTMLError(e)
+        raise DarkKeeperParseContentError(e)
 
-    return soup
+    return content
 
 
 def find_urls_in_menu(soup, css_menus, base_url):

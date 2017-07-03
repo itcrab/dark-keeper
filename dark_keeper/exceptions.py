@@ -14,7 +14,7 @@ class DarkKeeperParseError(DarkKeeperError):
     pass
 
 
-class DarkKeeperParseHTMLError(DarkKeeperParseError):
+class DarkKeeperParseContentError(DarkKeeperParseError):
     pass
 
 
