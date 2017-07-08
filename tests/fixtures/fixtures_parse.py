@@ -34,14 +34,14 @@ def html_for_parse():
 @pytest.fixture
 def urls_for_parse():
     return [
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/all',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/79/beeware-python-tools',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/78/how-i-built-an-entire-game-and-toolchain-100-in-python',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/77/20-python-libraries-you-aren-t-using-but-should',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/76/renewable-python',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/75/pythonic-games-at-checkio',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/74/past-present-and-future-of-ironpython',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/73/machine-learning-at-the-new-microsoft',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/72/fashion-driven-open-source-software-at-zalando',
-        'https://talkpython.fm.mock/https://talkpython.fm/episodes/show/71/soft-skills-the-software-developer-s-life-manual',
+        'https://talkpython.fm/episodes/all',
+        'https://talkpython.fm/episodes/show/79/beeware-python-tools',
+        'https://talkpython.fm/episodes/show/78/how-i-built-an-entire-game-and-toolchain-100-in-python',
+        'https://talkpython.fm/episodes/show/77/20-python-libraries-you-aren-t-using-but-should',
+        'https://talkpython.fm/episodes/show/76/renewable-python',
+        'https://talkpython.fm/episodes/show/75/pythonic-games-at-checkio',
+        'https://talkpython.fm/episodes/show/74/past-present-and-future-of-ironpython',
+        'https://talkpython.fm/episodes/show/73/machine-learning-at-the-new-microsoft',
+        'https://talkpython.fm/episodes/show/72/fashion-driven-open-source-software-at-zalando',
+        'https://talkpython.fm/episodes/show/71/soft-skills-the-software-developer-s-life-manual',
     ]
