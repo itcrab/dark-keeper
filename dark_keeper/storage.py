@@ -13,10 +13,8 @@ class Storage(list):
         self.coll_name = coll_name
         self.mongo_client = mongo_client
 
-    def append_row(self, soup):
-        row = create_new_data_row(soup, self.model)
-        if row:
-            self.append(row)
+    def append_row(self, row):
+        self.append(row)
 
     def export_mongo(self, log):
         log.info('- generating {} collection...'.format(self.coll_name))

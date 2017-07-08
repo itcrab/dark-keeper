@@ -47,7 +47,35 @@ class PodcastKeeper(DarkKeeper):
         self.menu.append_new_urls(urls)
 
     def parse_content(self, content):
-        self.storage.append_row(content)
+        row = OrderedDict([])
+
+        row.update({'title': self._get_title(content)})
+        row.update({'desc': self._get_desc(content)})
+        row.update({'mp3': self._get_mp3(content)})
+
+        if row['title'] and row['mp3']:
+            self.storage.append_row(row)
+
+    def _get_title(self, content):
+        title = content.cssselect(self.model['title'])
+        if not len(title):
+            return
+
+        return title[0].text_content().strip()
+
+    def _get_desc(self, content):
+        desc = content.cssselect(self.model['desc'])
+        if not len(desc):
+            return
+
+        return desc[0].text_content().strip()
+
+    def _get_mp3(self, content):
+        mp3_link = content.cssselect(self.model['mp3'])
+        if not len(mp3_link):
+            return
+
+        return mp3_link[0].get('src').strip()
 
 
 if __name__ == '__main__':
