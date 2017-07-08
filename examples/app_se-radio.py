@@ -3,6 +3,7 @@ from collections import OrderedDict
 from pymongo import MongoClient
 
 from dark_keeper import DarkKeeper
+from dark_keeper.parse import parse_urls
 
 
 class PodcastKeeper(DarkKeeper):
@@ -21,7 +22,9 @@ class PodcastKeeper(DarkKeeper):
     mongo_client = MongoClient('localhost', 27017)
 
     def parse_menu(self, content):
-        self.menu.append_new_urls(content)
+        urls = parse_urls(content, self.menu_model, self.base_url)
+
+        self.menu.append_new_urls(urls)
 
     def parse_content(self, content):
         self.storage.append_row(content)

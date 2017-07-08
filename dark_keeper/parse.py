@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 import lxml.html
 
@@ -15,17 +15,17 @@ def create_content(html):
     return content
 
 
-def find_urls_in_menu(soup, css_menus, base_url):
-    main_url = _base_url_to_main_url(base_url)
+def parse_urls(content, menu_model, base_url):
+    start_url = _calculate_start_url(base_url)
 
     urls = []
-    for menu in css_menus:
-        for link in soup.cssselect(menu):
+    for menu in menu_model:
+        for link in content.cssselect(menu):
             url = link.get('href')
             if not url:
                 continue
 
-            url = _normalize_url(url, main_url)
+            url = _normalize_url(url, start_url)
             if url not in urls:
                 urls.append(url)
 
@@ -68,22 +68,17 @@ def _tag_to_string(tag):
     return tag.text_content().strip()
 
 
-def _base_url_to_main_url(url):
-    url = urlparse(url)
-    main_page_url = '{scheme}://{netloc}'.format(
-        scheme=url.scheme, netloc=url.netloc
+def _calculate_start_url(base_url):
+    base_url = urlparse(base_url)
+
+    return '{scheme}://{netloc}'.format(
+        scheme=base_url.scheme, netloc=base_url.netloc
     )
 
-    return main_page_url
 
-
-def _normalize_url(url, main_url):
-    if not url.startswith(main_url):
-        if url.startswith('/'):
-            url = url[1:]
-
-        url = '{base_url}/{href}'.format(
-            base_url=main_url, href=url
-        )
+def _normalize_url(url, start_url):
+    url_obj = urlparse(url)
+    if not url_obj.netloc:
+        url = urljoin(start_url, url_obj.path)
 
     return url
