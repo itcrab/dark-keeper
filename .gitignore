@@ -12,5 +12,10 @@ __pycache__/
 # pytest
 .cache/
 
+# setuptools
+dark_keeper.egg-info/
+dist/
+MANIFEST
+
 # dark_keeper
 cache/

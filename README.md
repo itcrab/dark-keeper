@@ -17,7 +17,10 @@ Goal idea is create simple tool for this.
 - [x] export parsed data to MongoDB
 
 # Quick start
-`$ cat app.py`
+`$ mkvirtualenv keeper`<br />
+`$ workon keeper`<br />
+`(keeper)$ pip install dark-keeper`<br />
+`(keeper)$ cat app.py`
 ```python
 from collections import OrderedDict
 

@@ -1,0 +1,37 @@
+from setuptools import setup
+
+setup(
+    name='dark-keeper',
+    version='0.2.6',
+    packages=['dark_keeper'],
+    url='https://github.com/itcrab/dark-keeper',
+    license='MIT License',
+    author='Arcady Usov',
+    author_email='itcrab@gmail.com',
+    maintainer='Arcady Usov',
+    maintainer_email='itcrab@gmail.com',
+    description='Dark Keeper is open source simple web-parser for podcast-sites',
+    long_description=open('README.rst').read(),
+    install_requires=[
+        'cssselect',
+        'lxml',
+        'pymongo',
+        'requests',
+    ],
+    classifiers=[
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'License :: OSI Approved :: MIT License',
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'Topic :: Software Development :: Libraries :: Application Frameworks',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Internet :: WWW/HTTP',
+    ],
+)
