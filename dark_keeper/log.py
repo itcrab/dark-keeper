@@ -3,10 +3,10 @@ from collections import OrderedDict
 
 
 class Logger(object):
-    def __init__(self, db_name, coll_name, mongo_client):
-        self.db_name = db_name
-        self.coll_name = '{}_log'.format(coll_name)
+    def __init__(self, mongo_client, mongo_db_name, mongo_coll_name):
         self.mongo_client = mongo_client
+        self.mongo_db_name = mongo_db_name
+        self.mongo_coll_name = '{}_log'.format(mongo_coll_name)
 
         self.coll = self._get_mongo_collection()
 
@@ -25,10 +25,10 @@ class Logger(object):
         ]))
 
     def _get_mongo_collection(self):
-        db = getattr(self.mongo_client, self.db_name)
+        db = getattr(self.mongo_client, self.mongo_db_name)
 
-        coll = getattr(db, self.coll_name)
+        coll = getattr(db, self.mongo_coll_name)
         if coll.count():
             coll.drop()
 
-        return getattr(db, self.coll_name)
+        return getattr(db, self.mongo_coll_name)

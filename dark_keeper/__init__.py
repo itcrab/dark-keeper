@@ -10,22 +10,17 @@ class DarkKeeper(object):
     Dark Keeper is simple web-parser for podcast-sites.
     """
     base_url = None
-    menu_model = None
-    model = None
-    db_name = None
-    coll_name = None
+
     mongo_client = None
+    mongo_db_name = None
+    mongo_coll_name = None
 
     def __init__(self):
-        self.menu = Menu(
-            self.base_url,
-            self.menu_model
-        )
+        self.menu = Menu(self.base_url)
         self.storage = Storage(
-            self.model,
-            self.db_name,
-            self.coll_name,
-            self.mongo_client
+            self.mongo_client,
+            self.mongo_db_name,
+            self.mongo_coll_name
         )
         self.request = Request(
             [1, 2],  # delay
@@ -35,9 +30,9 @@ class DarkKeeper(object):
             'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
         )
         self.log = Logger(
-            self.db_name,
-            self.coll_name,
-            self.mongo_client
+            self.mongo_client,
+            self.mongo_db_name,
+            self.mongo_coll_name
         )
 
     def run(self):
@@ -58,8 +53,8 @@ class DarkKeeper(object):
         self.log.info(
             'Process is finished - check results in MongoDB!\n'
             'database: {db_name}, collection: {coll_name}'.format(
-                db_name=self.storage.db_name,
-                coll_name=self.storage.coll_name
+                db_name=self.storage.mongo_db_name,
+                coll_name=self.storage.mongo_coll_name
             )
         )
 
