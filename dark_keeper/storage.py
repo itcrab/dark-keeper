@@ -1,6 +1,3 @@
-import os
-
-
 class Storage(list):
     def __init__(self, mongo_client, mongo_db_name, mongo_coll_name):
         super().__init__()
@@ -25,10 +22,3 @@ class Storage(list):
             coll.insert_one(row)
 
         return self.mongo_coll_name
-
-
-def create_dirs(cache_dir):
-    if cache_dir and not os.path.isdir(cache_dir):
-        os.makedirs(cache_dir, exist_ok=True)
-
-        return True

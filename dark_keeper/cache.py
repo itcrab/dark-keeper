@@ -3,44 +3,49 @@ import re
 from urllib.parse import urlparse
 
 from .exceptions import DarkKeeperCacheReadError
-from .storage import create_dirs
 
 
-def from_cache(url, cache_dir):
-    cache_path = _get_cache_path(url, cache_dir)
-    if os.path.isfile(cache_path):
-        with open(cache_path, 'rb') as f:
-            try:
-                html = f.read()
-            except IOError as e:
-                raise DarkKeeperCacheReadError(e)
+class Cache(object):
+    cache_dir = None
 
-            return html
+    def read(self, url):
+        cache_path = self._get_cache_path(url)
+        if os.path.isfile(cache_path):
+            with open(cache_path, 'rb') as f:
+                try:
+                    html = f.read()
+                except IOError as e:
+                    raise DarkKeeperCacheReadError(e)
 
+                return html
 
-def to_cache(url, cache_dir, html):
-    cache_path = _get_cache_path(url, cache_dir)
-    with open(cache_path, 'wb') as f:
-        f.write(html)
+    def write(self, url, html):
+        cache_path = self._get_cache_path(url)
+        with open(cache_path, 'wb') as f:
+            f.write(html)
 
-    return cache_path
+        return cache_path
 
+    def _get_cache_path(self, url):
+        cache_dir = self._get_cache_dir(url)
 
-def get_cache_dir(base_url):
-    domain = urlparse(base_url).netloc
+        cache_file = '{}.html'.format(
+            re.sub(r'[:|/|?]', '_', url)
+        )
 
-    return os.path.join(
-        os.getcwd(), 'cache', domain
-    )
+        return os.path.join(
+            cache_dir, cache_file
+        )
 
+    def _get_cache_dir(self, url):
+        if self.cache_dir:
+            return self.cache_dir
 
-def _get_cache_path(url, cache_dir):
-    create_dirs(cache_dir)
+        domain = urlparse(url).netloc
+        self.cache_dir = os.path.join(
+            os.getcwd(), 'cache', domain
+        )
+        if not os.path.isdir(self.cache_dir):
+            os.makedirs(self.cache_dir, exist_ok=True)
 
-    url = re.sub(r'[:|/|?]', '_', url)
-    cache_file = '{}.html'.format(url)
-    cache_path = os.path.join(
-        cache_dir, cache_file
-    )
-
-    return cache_path
+        return self.cache_dir
