@@ -6,18 +6,18 @@
 Dark Keeper is open source simple web-parser for podcast-sites.
 
 # Goal idea
-I like listen IT-podcasts and learn something new.
-For really good podcasts I want download all episodes.
+I like listen IT-podcasts and learn something new.<br />
+For really good podcasts I want download all episodes.<br />
 Goal idea is create simple tool for this.
 
 # Features
-- [x] search and storage all links to pages with episodes
-- [x] download all found pages and creating cache (in next time will not be downloaded)
-- [x] parse all needed information from pages - you may create some columns
-- [x] export data to MongoDB
+- [x] simple web-spider walking on site
+- [x] cache for all downloaded pages
+- [x] parse any information from pages
+- [x] export parsed data to MongoDB
 
 # Quick start
-Example for radio-t podcast :: $ cat app.py
+`$ cat app.py`
 ```python
 from collections import OrderedDict
 
