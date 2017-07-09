@@ -1,11 +1,7 @@
-import os
-import sys
+import pytest
 
-sys.path.append(
-    os.path.join(os.path.dirname(__file__), 'fixtures')
-)
 
-pytest_plugins = [
-    'fixtures_cache', 'fixtures_menu', 'fixtures_parse',
-    'fixtures_request', 'fixtures_storage'
-]
+@pytest.fixture
+def html_mock():
+    with open('tests/fixtures/html_mock.html', 'rb') as f:
+        return f.read()

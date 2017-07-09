@@ -1,14 +1,13 @@
-import os
-
 from pymongo import MongoClient
 
 from dark_keeper.log import Logger
 
 
-def test_logger_export_mongo(cache_dir):
+def test_logger_export_mongo(tmpdir):
     mongo_client = MongoClient('localhost', 27017)
     mongo_db_name = 'podcasts_tests'
-    mongo_coll_name = os.path.basename(cache_dir)
+    mongo_coll_name = tmpdir.basename
+
 
     message = 'test message for collection {}'.format(mongo_coll_name)
     log = Logger(

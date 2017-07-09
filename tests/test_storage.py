@@ -9,17 +9,17 @@ from dark_keeper.parse import parse_text, parse_attr
 from dark_keeper.storage import Storage
 
 
-def test_storage(cache_dir, html_for_storage):
+def test_storage(tmpdir, html_mock):
     mongo_client = MongoClient('localhost', 27017)
     mongo_db_name = 'podcasts'
-    mongo_coll_name = os.path.basename(cache_dir)
+    mongo_coll_name = tmpdir.basename
     storage = Storage(
         mongo_client,
         mongo_db_name,
         mongo_coll_name
     )
 
-    content = lxml.html.fromstring(html_for_storage)
+    content = lxml.html.fromstring(html_mock)
     row = OrderedDict([])
 
     row.update({
@@ -43,17 +43,17 @@ def test_storage(cache_dir, html_for_storage):
     ]
 
 
-def test_exports(cache_dir, html_for_storage):
+def test_exports(tmpdir, html_mock):
     mongo_client = MongoClient('localhost', 27017)
     mongo_db_name = 'podcasts_tests'
-    mongo_coll_name = os.path.basename(cache_dir)
+    mongo_coll_name = tmpdir.basename
     storage = Storage(
         mongo_client,
         mongo_db_name,
         mongo_coll_name
     )
 
-    content = lxml.html.fromstring(html_for_storage)
+    content = lxml.html.fromstring(html_mock)
     row = OrderedDict([])
 
     row.update({

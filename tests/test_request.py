@@ -4,9 +4,9 @@ from dark_keeper.request import Request
 
 
 @responses.activate
-def test_request(html_for_request):
+def test_receive_html(html_mock):
     responses.add(responses.GET, 'https://talkpython.fm.mock/episodes/all',
-                  body=html_for_request, status=200,
+                  body=html_mock, status=200,
                   content_type='text/html')
 
     url = 'https://talkpython.fm.mock/episodes/all'
@@ -17,5 +17,4 @@ def test_request(html_for_request):
         'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
     )
     html = request.receive_html(url)
-
-    assert html == html_for_request
+    assert html == html_mock
