@@ -16,5 +16,9 @@ def test_receive_html(html_mock):
         'AppleWebKit/537.36 (KHTML, like Gecko) '
         'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
     )
+
     html = request.receive_html(url)
+    assert html == html_mock
+
+    html = request._from_url(url)
     assert html == html_mock
