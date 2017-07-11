@@ -1,7 +1,7 @@
 import lxml.html
 import responses
 
-from dark_keeper.parse import create_content, parse_urls, _calculate_start_url, _normalize_url
+from dark_keeper.parse import create_content, parse_urls, _calculate_start_url, _normalize_url, parse_text, parse_attr
 from dark_keeper.request import Request
 
 
@@ -26,7 +26,7 @@ def test_create_content(html_mock):
 
 
 @responses.activate
-def test_parse_urls(html_mock):
+def test_parse_functions(html_mock):
     urls_for_parse = [
         'https://talkpython.fm/episodes/all',
         'https://talkpython.fm/episodes/show/79/beeware-python-tools',
@@ -58,8 +58,15 @@ def test_parse_urls(html_mock):
     base_url = url
 
     urls = parse_urls(content, css_selector, base_url)
-
     assert urls == urls_for_parse
+
+    css_selector = '.entry .show-episode-page h1'
+    text = parse_text(content, css_selector)
+    assert text == 'title one'
+
+    css_selector = '.entry .episode-buttons a'
+    attr = parse_attr(content, css_selector, 'href')
+    assert attr == '/mp3/podcast_0.mp3'
 
 
 def test_calculate_start_url():
