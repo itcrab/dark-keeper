@@ -1,12 +1,14 @@
 import lxml.html
 import responses
+from pytest import raises
 
+from dark_keeper.exceptions import DarkKeeperParseContentError
 from dark_keeper.parse import create_content, parse_urls, _calculate_start_url, _normalize_url, parse_text, parse_attr
 from dark_keeper.request import Request
 
 
 @responses.activate
-def test_create_content(html_mock):
+def test_create_content_good(html_mock):
     url = 'https://talkpython.fm.mock/episodes/all'
     responses.add(responses.GET, url,
                   body=html_mock, status=200,
@@ -23,6 +25,14 @@ def test_create_content(html_mock):
     content = create_content(html)
 
     assert isinstance(content, lxml.html.HtmlElement)
+
+
+def test_create_content_bad():
+    with raises(DarkKeeperParseContentError):
+        create_content('')
+
+    with raises(DarkKeeperParseContentError):
+        create_content(None)
 
 
 @responses.activate
@@ -64,9 +74,21 @@ def test_parse_functions(html_mock):
     text = parse_text(content, css_selector)
     assert text == 'title one'
 
+    css_selector = '.entry .show-episode-page h2'
+    text = parse_text(content, css_selector)
+    assert text is None
+
     css_selector = '.entry .episode-buttons a'
     attr = parse_attr(content, css_selector, 'href')
     assert attr == '/mp3/podcast_0.mp3'
+
+    css_selector = '.entry .episode-buttons a'
+    attr = parse_attr(content, css_selector, 'title')
+    assert attr is None
+
+    css_selector = '.entry .episode-buttons-no a'
+    attr = parse_attr(content, css_selector, 'href')
+    assert attr is None
 
 
 def test_calculate_start_url():

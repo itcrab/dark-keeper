@@ -31,19 +31,21 @@ def parse_urls(content, css_selector, base_url):
 
 
 def parse_text(content, css_selector):
-    title = content.cssselect(css_selector)
-    if not len(title):
+    tags = content.cssselect(css_selector)
+    if not tags:
         return
 
-    return title[0].text_content().strip()
+    return tags[0].text_content().strip()
 
 
 def parse_attr(content, css_selector, css_attr):
-    mp3_link = content.cssselect(css_selector)
-    if not len(mp3_link):
+    tags = content.cssselect(css_selector)
+    if not tags:
         return
 
-    return mp3_link[0].get(css_attr).strip()
+    attr = tags[0].get(css_attr)
+    if attr:
+        return attr.strip()
 
 
 def _calculate_start_url(base_url):
