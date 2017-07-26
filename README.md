@@ -43,17 +43,10 @@ class PodcastKeeper(DarkKeeper):
         self.menu.append_new_urls(urls)
 
     def parse_content(self, content):
-        row = OrderedDict([])
-
-        row.update({
-            'title': parse_text(content, '.hentry .entry-title')
-        })
-        row.update({
-            'desc': parse_text(content, '.hentry .entry-content')
-        })
-        row.update({
-            'mp3': parse_attr(content, '.hentry audio', 'src')
-        })
+        row = OrderedDict()
+        row['title'] = parse_text(content, '.hentry .entry-title')
+        row['desc'] = parse_text(content, '.hentry .entry-content')
+        row['mp3'] = parse_attr(content, '.hentry audio', 'src')
 
         if row['title'] and row['mp3']:
             self.storage.append_row(row)

@@ -39,13 +39,8 @@ class DarkKeeperTest(DarkKeeper):
         pass
 
     def parse_content(self, content):
-        row = OrderedDict([])
-
-        row.update({
-            'title': parse_text(content, '.entry .show-episode-page h1')
-        })
-        row.update({
-            'mp3': parse_attr(content, '.entry .episode-buttons a', 'href')
-        })
+        row = OrderedDict()
+        row['title'] = parse_text(content, '.entry .show-episode-page h1')
+        row['mp3'] = parse_attr(content, '.entry .episode-buttons a', 'href')
 
         self.storage.append_row(row)

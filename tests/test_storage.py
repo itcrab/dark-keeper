@@ -20,17 +20,11 @@ def test_storage(tmpdir, html_mock):
     )
 
     content = lxml.html.fromstring(html_mock)
-    row = OrderedDict([])
 
-    row.update({
-        'title': parse_text(content, '.show-episode-page h1')
-    })
-    row.update({
-        'desc': parse_text(content, '.large-content-text')
-    })
-    row.update({
-        'mp3': parse_attr(content, '.episode-buttons a[href$=".mp3"]', 'href')
-    })
+    row = OrderedDict()
+    row['title'] = parse_text(content, '.show-episode-page h1')
+    row['desc'] = parse_text(content, '.large-content-text')
+    row['mp3'] = parse_attr(content, '.episode-buttons a[href$=".mp3"]', 'href')
 
     storage.append_row(row)
 
@@ -54,17 +48,11 @@ def test_exports(tmpdir, html_mock):
     )
 
     content = lxml.html.fromstring(html_mock)
-    row = OrderedDict([])
 
-    row.update({
-        'title': parse_text(content, '.show-episode-page h1')
-    })
-    row.update({
-        'desc': parse_text(content, '.large-content-text')
-    })
-    row.update({
-        'mp3': parse_attr(content, '.episode-buttons a[href$=".mp3"]', 'href')
-    })
+    row = OrderedDict()
+    row['title'] = parse_text(content, '.show-episode-page h1')
+    row['desc'] = parse_text(content, '.large-content-text')
+    row['mp3'] = parse_attr(content, '.episode-buttons a[href$=".mp3"]', 'href')
 
     storage.append_row(row)
 
