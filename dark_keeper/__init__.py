@@ -40,8 +40,11 @@ class DarkKeeper(object):
         for index, url in enumerate(self.menu):
             content = self._get_content(url)
 
-            self.parse_menu(content)
-            self.parse_content(content)
+            urls = self.parse_menu(content)
+            self.menu.append_new_urls(urls)
+
+            row = self.parse_content(content)
+            self.storage.append_row(row)
 
             self.log.info('url #{index}: {url}'.format(
                 index=index, url=url

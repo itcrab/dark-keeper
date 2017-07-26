@@ -40,7 +40,7 @@ class PodcastKeeper(DarkKeeper):
     def parse_menu(self, content):
         urls = parse_urls(content, '#blog-archives h1 a', self.base_url)
 
-        self.menu.append_new_urls(urls)
+        return urls
 
     def parse_content(self, content):
         row = OrderedDict()
@@ -49,7 +49,7 @@ class PodcastKeeper(DarkKeeper):
         row['mp3'] = parse_attr(content, '.hentry audio', 'src')
 
         if row['title'] and row['mp3']:
-            self.storage.append_row(row)
+            return row
 
 
 if __name__ == '__main__':

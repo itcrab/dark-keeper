@@ -7,7 +7,8 @@ class Storage(list):
         self.mongo_coll_name = mongo_coll_name
 
     def append_row(self, row):
-        self.append(row)
+        if row:
+            self.append(row)
 
     def export_mongo(self, log):
         log.info('- generating {} collection...'.format(self.mongo_coll_name))

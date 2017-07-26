@@ -36,11 +36,11 @@ class DarkKeeperTest(DarkKeeper):
     mongo_coll_name = 'talkpython.fm'
 
     def parse_menu(self, content):
-        pass
+        return []
 
     def parse_content(self, content):
         row = OrderedDict()
         row['title'] = parse_text(content, '.entry .show-episode-page h1')
         row['mp3'] = parse_attr(content, '.entry .episode-buttons a', 'href')
 
-        self.storage.append_row(row)
+        return row
