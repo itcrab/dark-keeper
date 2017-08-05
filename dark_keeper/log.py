@@ -2,7 +2,7 @@ import datetime
 from collections import OrderedDict
 
 
-class Logger(object):
+class Log(object):
     def __init__(self, mongo_client, mongo_db_name, mongo_coll_name):
         self.mongo_client = mongo_client
         self.mongo_db_name = mongo_db_name

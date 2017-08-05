@@ -1,8 +1,8 @@
-from .log import Logger
-from .menu import Menu
+from .exports import MongoExport
+from .log import Log
 from .parse import create_content
 from .request import Request
-from .storage import Storage
+from .storages import UrlsStorage, DataStorage
 
 
 class DarkKeeper(object):
@@ -16,8 +16,9 @@ class DarkKeeper(object):
     mongo_coll_name = None
 
     def __init__(self):
-        self.menu = Menu(self.base_url)
-        self.storage = Storage(
+        self.urls_storage = UrlsStorage(self.base_url)
+        self.data_storage = DataStorage()
+        self.mongo_export = MongoExport(
             self.mongo_client,
             self.mongo_db_name,
             self.mongo_coll_name
@@ -28,43 +29,40 @@ class DarkKeeper(object):
             'AppleWebKit/537.36 (KHTML, like Gecko) '
             'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
         )
-        self.log = Logger(
+        self.log = Log(
             self.mongo_client,
             self.mongo_db_name,
             self.mongo_coll_name
         )
 
     def run(self):
-        self.log.info('Process is started.')
+        self.log.info('Parsing is started.')
 
-        for index, url in enumerate(self.menu):
-            content = self._get_content(url)
-
-            urls = self.parse_menu(content)
-            self.menu.append_new_urls(urls)
-
-            row = self.parse_content(content)
-            self.storage.append_row(row)
-
-            self.log.info('url #{index}: {url}'.format(
+        for index, url in enumerate(self.urls_storage):
+            self.log.info('link #{index}: {url}'.format(
                 index=index, url=url
             ))
 
-        self.storage.export_mongo(self.log)
+            content = self._get_content(url)
 
-        self.log.info(
-            'Process is finished - check results in MongoDB!\n'
-            'database: {db_name}, collection: {coll_name}'.format(
-                db_name=self.storage.mongo_db_name,
-                coll_name=self.storage.mongo_coll_name
-            )
-        )
+            urls = self.parse_urls(content)
+            self.urls_storage.write(urls)
 
-    def parse_menu(self, content):
-        raise NotImplementedError()
+            data = self.parse_data(content)
+            self.data_storage.write(data)
 
-    def parse_content(self, content):
-        raise NotImplementedError()
+        self.log.info('Parsing is finished.')
+
+        self.export_data(self.data_storage)
+
+    def parse_urls(self, content):
+        raise NotImplementedError('You must implemented "parse_urls" method!')
+
+    def parse_data(self, content):
+        raise NotImplementedError('You must implemented "parse_data" method!')
+
+    def export_data(self, data):
+        self.mongo_export.export(data, self.log)
 
     def _get_content(self, url):
         html = self.request.receive_html(url)

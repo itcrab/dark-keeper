@@ -1,16 +1,16 @@
 from pymongo import MongoClient
 
-from dark_keeper.log import Logger
+from dark_keeper.log import Log
 
 
-def test_logger_export_mongo(tmpdir):
+def test_log_export_mongo(tmpdir):
     mongo_client = MongoClient('localhost', 27017)
     mongo_db_name = 'podcasts_tests'
     mongo_coll_name = tmpdir.basename
 
 
     message = 'test message for collection {}'.format(mongo_coll_name)
-    log = Logger(
+    log = Log(
         mongo_client,
         mongo_db_name,
         mongo_coll_name

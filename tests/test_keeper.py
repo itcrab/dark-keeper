@@ -15,8 +15,8 @@ def test_dark_keeper(html_mock):
 
     dkt = DarkKeeperTest()
     dkt.run()
-    assert dkt.storage[0]['title'] == 'title one'
-    assert dkt.storage[0]['mp3'] == '/mp3/podcast_0.mp3'
+    assert dkt.data_storage[0]['title'] == 'title one'
+    assert dkt.data_storage[0]['mp3'] == '/mp3/podcast_0.mp3'
 
     mongo_client = MongoClient('localhost', 27017)
     mongo_db = getattr(mongo_client, 'podcasts_tests')
@@ -35,12 +35,12 @@ class DarkKeeperTest(DarkKeeper):
     mongo_db_name = 'podcasts_tests'
     mongo_coll_name = 'talkpython.fm'
 
-    def parse_menu(self, content):
+    def parse_urls(self, content):
         return []
 
-    def parse_content(self, content):
-        row = OrderedDict()
-        row['title'] = parse_text(content, '.entry .show-episode-page h1')
-        row['mp3'] = parse_attr(content, '.entry .episode-buttons a', 'href')
+    def parse_data(self, content):
+        data = OrderedDict()
+        data['title'] = parse_text(content, '.entry .show-episode-page h1')
+        data['mp3'] = parse_attr(content, '.entry .episode-buttons a', 'href')
 
-        return row
+        return data

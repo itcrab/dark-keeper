@@ -3,7 +3,7 @@ import time
 
 import requests
 
-from dark_keeper.cache import Cache
+from .cache import Cache
 from .exceptions import DarkKeeperRequestResponseError
 
 
