@@ -23,8 +23,6 @@ Quick start
 
 ``$ mkvirtualenv keeper``
 
-``$ workon keeper``
-
 ``(keeper)$ pip install dark-keeper``
 
 ``(keeper)$ cat app.py``

@@ -18,7 +18,6 @@ Goal idea is create simple tool for this.
 
 # Quick start
 `$ mkvirtualenv keeper`<br />
-`$ workon keeper`<br />
 `(keeper)$ pip install dark-keeper`<br />
 `(keeper)$ cat app.py`
 ```python
