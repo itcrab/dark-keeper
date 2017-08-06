@@ -10,30 +10,19 @@ class DarkKeeper(object):
     Dark Keeper is simple web-parser for podcast-sites.
     """
     base_url = None
-
-    mongo_client = None
-    mongo_db_name = None
-    mongo_coll_name = None
+    mongo_uri = None
 
     def __init__(self):
         self.urls_storage = UrlsStorage(self.base_url)
         self.data_storage = DataStorage()
-        self.mongo_export = MongoExport(
-            self.mongo_client,
-            self.mongo_db_name,
-            self.mongo_coll_name
-        )
+        self.mongo_export = MongoExport(self.mongo_uri)
         self.request = Request(
             [1, 2],  # delay
             'Mozilla/5.0 (Windows NT 10.0; WOW64) '  # user-agent
             'AppleWebKit/537.36 (KHTML, like Gecko) '
             'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
         )
-        self.log = Log(
-            self.mongo_client,
-            self.mongo_db_name,
-            self.mongo_coll_name
-        )
+        self.log = Log(self.mongo_uri)
 
     def run(self):
         self.log.info('Parsing is started.')

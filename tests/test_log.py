@@ -1,25 +1,15 @@
-from pymongo import MongoClient
-
+from dark_keeper.exports import get_mongo_collection
 from dark_keeper.log import Log
 
 
 def test_log_export_mongo(tmpdir):
-    mongo_client = MongoClient('localhost', 27017)
-    mongo_db_name = 'podcasts_tests'
-    mongo_coll_name = tmpdir.basename
+    mongo_uri = 'mongodb://localhost/podcasts_tests/{}'.format(tmpdir.basename)
 
-
-    message = 'test message for collection {}'.format(mongo_coll_name)
-    log = Log(
-        mongo_client,
-        mongo_db_name,
-        mongo_coll_name
-    )
+    message = 'test message for collection {}'.format(mongo_uri.split('/')[-1])
+    log = Log(mongo_uri)
     log.info(message)
 
-    db = getattr(mongo_client, mongo_db_name)
-
-    coll = getattr(db, '{}_log'.format(mongo_coll_name))
+    coll = get_mongo_collection('{}_log'.format(mongo_uri))
     log_message = coll.find_one()
 
     assert log_message['level'] == 'info'

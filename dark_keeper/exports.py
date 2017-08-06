@@ -1,28 +1,37 @@
-class MongoExport(object):
-    def __init__(self, mongo_client, mongo_db_name, mongo_coll_name):
-        super().__init__()
+from pymongo import MongoClient
 
-        self.mongo_client = mongo_client
-        self.mongo_db_name = mongo_db_name
-        self.mongo_coll_name = mongo_coll_name
+
+class MongoExport(object):
+    def __init__(self, mongo_uri):
+        self.mongo_uri = mongo_uri
+        self.mongo_coll = get_mongo_collection(self.mongo_uri)
 
     def export(self, data, log):
         log.info('Exporting to MongoDB is started.')
         log.info(
-            'Using MongoDB database: {} and collection: {}'.format(
-                self.mongo_db_name, self.mongo_coll_name
+            'Using MongoDB connection: {}'.format(
+                self.mongo_uri
             )
         )
 
-        db = getattr(self.mongo_client, self.mongo_db_name)
-
-        coll = getattr(db, self.mongo_coll_name)
-        if coll.count():
-            coll.drop()
+        if self.mongo_coll.count():
+            self.mongo_coll.drop()
 
         for row in data:
-            coll.insert_one(row)
+            self.mongo_coll.insert_one(row)
 
         log.info('Exporting to MongoDB is finished.')
 
-        return self.mongo_coll_name
+        return self.mongo_coll.name
+
+
+def get_mongo_collection(uri):
+    uri_split = uri.split('/')
+
+    uri_collection = uri.split('/')[-1]
+    uri_database = uri.split('/')[-2]
+    uri_connection = '/'.join(uri_split[:-2])
+
+    database = MongoClient(uri_connection).get_database(uri_database)
+
+    return getattr(database, uri_collection)
