@@ -1,13 +1,13 @@
-from dark_keeper.exports import get_mongo_collection
-from dark_keeper.log import Log
+from dark_keeper import LogMongo
+from dark_keeper.mongo import get_mongo_collection
 
 
 def test_log_export_mongo(tmpdir):
     mongo_uri = 'mongodb://localhost/podcasts_tests/{}'.format(tmpdir.basename)
 
     message = 'test message for collection {}'.format(mongo_uri.split('/')[-1])
-    log = Log(mongo_uri)
-    log.info(message)
+    log_mongo = LogMongo(mongo_uri)
+    log_mongo.info(message)
 
     coll = get_mongo_collection('{}_log'.format(mongo_uri))
     log_message = coll.find_one()

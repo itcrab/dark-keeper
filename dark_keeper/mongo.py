@@ -1,7 +1,10 @@
+import datetime
+from collections import OrderedDict
+
 from pymongo import MongoClient
 
 
-class MongoExport(object):
+class ExportMongo(object):
     def __init__(self, mongo_uri):
         self.mongo_uri = mongo_uri
         self.mongo_coll = get_mongo_collection(self.mongo_uri)
@@ -23,6 +26,26 @@ class MongoExport(object):
         log.info('Exporting to MongoDB is finished.')
 
         return self.mongo_coll.name
+
+
+class LogMongo(object):
+    def __init__(self, mongo_uri):
+        self.mongo_uri = '{}_log'.format(mongo_uri)
+        self.mongo_coll = get_mongo_collection(self.mongo_uri)
+
+    def info(self, msg):
+        created = datetime.datetime.now()
+
+        print('{} {}'.format(created, msg))
+
+        self.export_mongo('info', msg, created)
+
+    def export_mongo(self, level, msg, created):
+        self.mongo_coll.insert_one(OrderedDict([
+            ('level', level),
+            ('message', msg),
+            ('created', created)
+        ]))
 
 
 def get_mongo_collection(uri):

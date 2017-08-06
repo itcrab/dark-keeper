@@ -3,7 +3,7 @@ from collections import OrderedDict
 import responses
 
 from dark_keeper import DarkKeeper
-from dark_keeper.exports import get_mongo_collection
+from dark_keeper.mongo import get_mongo_collection
 from dark_keeper.parse import parse_text, parse_attr
 
 
