@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='dark-keeper',
-    version='0.2.6',
+    version='0.2.7',
     packages=['dark_keeper'],
     url='https://github.com/itcrab/dark-keeper',
     license='MIT License',
