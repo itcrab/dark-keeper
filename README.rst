@@ -1,3 +1,5 @@
+|Build Status| |Coverage Status| |Code Climate| |license|
+
 Dark Keeper
 ===========
 
@@ -56,3 +58,12 @@ Quick start
     if __name__ == '__main__':
         pk = PodcastKeeper()
         pk.run()
+
+.. |Build Status| image:: https://travis-ci.org/itcrab/dark-keeper.svg?branch=master
+   :target: https://travis-ci.org/itcrab/dark-keeper
+.. |Coverage Status| image:: https://coveralls.io/repos/github/itcrab/dark-keeper/badge.svg?branch=master
+   :target: https://coveralls.io/github/itcrab/dark-keeper?branch=master
+.. |Code Climate| image:: https://codeclimate.com/github/itcrab/dark-keeper/badges/gpa.svg
+   :target: https://codeclimate.com/github/itcrab/dark-keeper
+.. |license| image:: https://img.shields.io/github/license/mashape/apistatus.svg
+   :target: https://github.com/itcrab/dark-keeper
