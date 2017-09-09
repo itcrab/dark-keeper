@@ -1,5 +1,5 @@
+from .content import Content
 from .mongo import ExportMongo, LogMongo
-from .parse import create_content
 from .request import Request
 from .storages import UrlsStorage, DataStorage
 
@@ -22,6 +22,7 @@ class DarkKeeper(object):
             'AppleWebKit/537.36 (KHTML, like Gecko) '
             'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
         )
+        self.content = Content()
 
     def run(self):
         self.log_mongo.info('Parsing is started.')
@@ -31,12 +32,13 @@ class DarkKeeper(object):
                 index=index, url=url
             ))
 
-            content = self._get_content(url)
+            html = self.request.receive_html(url)
+            self.content.set_content(html)
 
-            urls = self.parse_urls(content)
+            urls = self.parse_urls(self.content)
             self.urls_storage.write(urls)
 
-            data = self.parse_data(content)
+            data = self.parse_data(self.content)
             self.data_storage.write(data)
 
         self.log_mongo.info('Parsing is finished.')
@@ -51,9 +53,3 @@ class DarkKeeper(object):
 
     def export_data(self, data):
         self.export_mongo.export(data, self.log_mongo)
-
-    def _get_content(self, url):
-        html = self.request.receive_html(url)
-        content = create_content(html)
-
-        return content

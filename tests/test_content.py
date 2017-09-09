@@ -2,8 +2,8 @@ import lxml.html
 import responses
 from pytest import raises
 
+from dark_keeper.content import Content
 from dark_keeper.exceptions import DarkKeeperParseContentError
-from dark_keeper.parse import create_content, parse_urls, _calculate_start_url, _normalize_url, parse_text, parse_attr
 from dark_keeper.request import Request
 
 
@@ -22,17 +22,21 @@ def test_create_content_good(html_mock):
     )
 
     html = request.receive_html(url)
-    content = create_content(html)
 
-    assert isinstance(content, lxml.html.HtmlElement)
+    content = Content()
+    content.set_content(html)
+
+    assert isinstance(content.get_content(), lxml.html.HtmlElement)
 
 
 def test_create_content_bad():
-    with raises(DarkKeeperParseContentError):
-        create_content('')
+    content = Content()
 
     with raises(DarkKeeperParseContentError):
-        create_content(None)
+        content.set_content('')
+
+    with raises(DarkKeeperParseContentError):
+        content.set_content(None)
 
 
 @responses.activate
@@ -63,59 +67,31 @@ def test_parse_functions(html_mock):
     )
 
     html = request.receive_html(url)
-    content = create_content(html)
+
+    content = Content()
+    content.set_content(html)
     css_selector = '.menu li a'
     base_url = url
 
-    urls = parse_urls(content, css_selector, base_url)
+    urls = content.parse_urls(css_selector, base_url)
     assert urls == urls_for_parse
 
     css_selector = '.entry .show-episode-page h1'
-    text = parse_text(content, css_selector)
+    text = content.parse_text(css_selector)
     assert text == 'title one'
 
     css_selector = '.entry .show-episode-page h2'
-    text = parse_text(content, css_selector)
+    text = content.parse_text(css_selector)
     assert text is None
 
     css_selector = '.entry .episode-buttons a'
-    attr = parse_attr(content, css_selector, 'href')
+    attr = content.parse_attr(css_selector, 'href')
     assert attr == '/mp3/podcast_0.mp3'
 
     css_selector = '.entry .episode-buttons a'
-    attr = parse_attr(content, css_selector, 'title')
+    attr = content.parse_attr(css_selector, 'title')
     assert attr is None
 
     css_selector = '.entry .episode-buttons-no a'
-    attr = parse_attr(content, css_selector, 'href')
+    attr = content.parse_attr(css_selector, 'href')
     assert attr is None
-
-
-def test_calculate_start_url():
-    urls = {
-        'https://talkpython.fm.mock/episodes/all':
-            'https://talkpython.fm.mock',
-        'http://www.se-radio.net/2016/10/se-radio-episode-271-idit-levine-on-unikernelsl/':
-            'http://www.se-radio.net',
-    }
-
-    for url in urls:
-        main_url = _calculate_start_url(url)
-
-        assert main_url == urls[url]
-
-
-def test_normalize_url():
-    urls = {
-        '/episodes/all':
-            'https://talkpython.fm.mock',
-        '/2016/10/se-radio-episode-271-idit-levine-on-unikernelsl/':
-            'http://www.se-radio.net',
-    }
-
-    for url in urls:
-        normal_url = _normalize_url(url, urls[url])
-
-        assert normal_url == '{main_url}{path}'.format(
-            main_url=urls[url], path=url
-        )

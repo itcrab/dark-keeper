@@ -1,22 +1,20 @@
 from collections import OrderedDict
 
-import lxml.html
-
-from dark_keeper import ExportMongo, LogMongo
-from dark_keeper.mongo import get_mongo_collection
-from dark_keeper.parse import parse_text, parse_attr
+from dark_keeper.content import Content
+from dark_keeper.mongo import LogMongo, ExportMongo, get_mongo_collection
 from dark_keeper.storages import DataStorage
 
 
 def test_exports(tmpdir, html_mock):
     data_storage = DataStorage()
 
-    content = lxml.html.fromstring(html_mock)
+    content = Content()
+    content.set_content(html_mock)
 
     data = OrderedDict()
-    data['title'] = parse_text(content, '.show-episode-page h1')
-    data['desc'] = parse_text(content, '.large-content-text')
-    data['mp3'] = parse_attr(content, '.episode-buttons a[href$=".mp3"]', 'href')
+    data['title'] = content.parse_text('.show-episode-page h1')
+    data['desc'] = content.parse_text('.large-content-text')
+    data['mp3'] = content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href')
 
     data_storage.write(data)
 

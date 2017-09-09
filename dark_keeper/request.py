@@ -1,5 +1,6 @@
 import random
 import time
+from urllib.parse import urlparse, urljoin
 
 import requests
 
@@ -43,3 +44,19 @@ class Request(object):
         html = response.content
 
         return html
+
+    @staticmethod
+    def calculate_start_url(base_url):
+        base_url = urlparse(base_url)
+
+        return '{scheme}://{netloc}'.format(
+            scheme=base_url.scheme, netloc=base_url.netloc
+        )
+
+    @staticmethod
+    def normalize_url(url, start_url):
+        url_obj = urlparse(url)
+        if not url_obj.netloc:
+            url = urljoin(start_url, url_obj.path)
+
+        return url

@@ -1,10 +1,6 @@
 from collections import OrderedDict
 
-import lxml.html
-import lxml.html
-
-from dark_keeper.parse import parse_text, parse_attr
-from dark_keeper.parse import parse_urls
+from dark_keeper.content import Content
 from dark_keeper.storages import UrlsStorage, DataStorage
 
 
@@ -13,8 +9,10 @@ def test_urls_storage(html_mock):
     css_selector = '.menu a'
     url_storage = UrlsStorage(url)
 
-    content = lxml.html.fromstring(html_mock)
-    urls = parse_urls(content, css_selector, url)
+    content = Content()
+    content.set_content(html_mock)
+
+    urls = content.parse_urls(css_selector, url)
     url_storage.write(urls)
 
     assert url_storage == [
@@ -36,8 +34,10 @@ def test_urls_storage_unique_urls(html_mock):
     css_selector = '.menu a'
     url_storage = UrlsStorage(url)
 
-    content = lxml.html.fromstring(html_mock)
-    urls = parse_urls(content, css_selector, url)
+    content = Content()
+    content.set_content(html_mock)
+
+    urls = content.parse_urls(css_selector, url)
     for i in range(3):
         url_storage.write(urls)
 
@@ -58,12 +58,13 @@ def test_urls_storage_unique_urls(html_mock):
 def test_data_storage(html_mock):
     data_storage = DataStorage()
 
-    content = lxml.html.fromstring(html_mock)
+    content = Content()
+    content.set_content(html_mock)
 
     data = OrderedDict()
-    data['title'] = parse_text(content, '.show-episode-page h1')
-    data['desc'] = parse_text(content, '.large-content-text')
-    data['mp3'] = parse_attr(content, '.episode-buttons a[href$=".mp3"]', 'href')
+    data['title'] = content.parse_text('.show-episode-page h1')
+    data['desc'] = content.parse_text('.large-content-text')
+    data['mp3'] = content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href')
 
     data_storage.write(data)
 

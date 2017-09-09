@@ -4,7 +4,6 @@ import responses
 
 from dark_keeper import DarkKeeper
 from dark_keeper.mongo import get_mongo_collection
-from dark_keeper.parse import parse_text, parse_attr
 
 
 @responses.activate
@@ -37,7 +36,7 @@ class DarkKeeperTest(DarkKeeper):
 
     def parse_data(self, content):
         data = OrderedDict()
-        data['title'] = parse_text(content, '.entry .show-episode-page h1')
-        data['mp3'] = parse_attr(content, '.entry .episode-buttons a', 'href')
+        data['title'] = content.parse_text('.entry .show-episode-page h1')
+        data['mp3'] = content.parse_attr('.entry .episode-buttons a', 'href')
 
         return data

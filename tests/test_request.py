@@ -22,3 +22,33 @@ def test_receive_html(html_mock):
 
     html = request._from_url(url)
     assert html == html_mock
+
+
+def test_calculate_start_url():
+    urls = {
+        'https://talkpython.fm.mock/episodes/all':
+            'https://talkpython.fm.mock',
+        'http://www.se-radio.net/2016/10/se-radio-episode-271-idit-levine-on-unikernelsl/':
+            'http://www.se-radio.net',
+    }
+
+    for url in urls:
+        main_url = Request.calculate_start_url(url)
+
+        assert main_url == urls[url]
+
+
+def test_normalize_url():
+    urls = {
+        '/episodes/all':
+            'https://talkpython.fm.mock',
+        '/2016/10/se-radio-episode-271-idit-levine-on-unikernelsl/':
+            'http://www.se-radio.net',
+    }
+
+    for url in urls:
+        normal_url = Request.normalize_url(url, urls[url])
+
+        assert normal_url == '{main_url}{path}'.format(
+            main_url=urls[url], path=url
+        )

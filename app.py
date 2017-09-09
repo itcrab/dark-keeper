@@ -1,7 +1,6 @@
 from collections import OrderedDict
 
 from dark_keeper import DarkKeeper
-from dark_keeper.parse import parse_urls, parse_text, parse_attr
 
 
 class PodcastKeeper(DarkKeeper):
@@ -9,15 +8,15 @@ class PodcastKeeper(DarkKeeper):
     mongo_uri = 'mongodb://localhost/podcasts/radio-t.com'
 
     def parse_urls(self, content):
-        urls = parse_urls(content, '#blog-archives h1 a', self.base_url)
+        urls = content.parse_urls('#blog-archives h1 a', self.base_url)
 
         return urls
 
     def parse_data(self, content):
         data = OrderedDict()
-        data['title'] = parse_text(content, '.hentry .entry-title')
-        data['desc'] = parse_text(content, '.hentry .entry-content')
-        data['mp3'] = parse_attr(content, '.hentry audio', 'src')
+        data['title'] = content.parse_text('.hentry .entry-title')
+        data['desc'] = content.parse_text('.hentry .entry-content')
+        data['mp3'] = content.parse_attr('.hentry audio', 'src')
 
         if data['title'] and data['mp3']:
             return data

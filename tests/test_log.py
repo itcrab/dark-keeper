@@ -1,5 +1,4 @@
-from dark_keeper import LogMongo
-from dark_keeper.mongo import get_mongo_collection
+from dark_keeper.mongo import LogMongo, get_mongo_collection
 
 
 def test_log_export_mongo(tmpdir):
