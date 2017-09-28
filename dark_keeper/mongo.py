@@ -20,8 +20,7 @@ class ExportMongo(object):
         if self.mongo_coll.count():
             self.mongo_coll.drop()
 
-        for row in data:
-            self.mongo_coll.insert_one(row)
+        self.mongo_coll.insert_many(data)
 
         log.info('Exporting to MongoDB is finished.')
 
