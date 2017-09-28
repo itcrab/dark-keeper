@@ -1,5 +1,5 @@
-import datetime
 from collections import OrderedDict
+from datetime import datetime
 
 from pymongo import MongoClient
 
@@ -34,7 +34,7 @@ class LogMongo(object):
         self.mongo_coll = get_mongo_collection(self.mongo_uri)
 
     def info(self, msg):
-        created = datetime.datetime.now()
+        created = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
 
         print('{} {}'.format(created, msg))
 
