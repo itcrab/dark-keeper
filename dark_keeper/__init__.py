@@ -20,7 +20,7 @@ class DarkKeeper(object):
             [1, 2],  # delay
             'Mozilla/5.0 (Windows NT 10.0; WOW64) '  # user-agent
             'AppleWebKit/537.36 (KHTML, like Gecko) '
-            'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81'
+            'Chrome/61.0.3163.91 Safari/537.36 OPR/48.0.2685.32'
         )
         self.content = Content()
 
