@@ -17,10 +17,10 @@ class DarkKeeper(object):
         self.export_mongo = ExportMongo(self.mongo_uri)
         self.log_mongo = LogMongo(self.mongo_uri)
         self.request = Request(
-            [1, 2],  # delay
-            'Mozilla/5.0 (Windows NT 10.0; WOW64) '  # user-agent
-            'AppleWebKit/537.36 (KHTML, like Gecko) '
-            'Chrome/61.0.3163.91 Safari/537.36 OPR/48.0.2685.32'
+            delay=[1, 2],
+            user_agent='Mozilla/5.0 (Windows NT 10.0; WOW64) '
+                       'AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'Chrome/61.0.3163.91 Safari/537.36 OPR/48.0.2685.32'
         )
         self.content = Content()
 
