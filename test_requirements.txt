@@ -1,5 +1,5 @@
 -r requirements.txt
-pytest==3.2.2
+pytest==3.3.0
 python-coveralls==2.9.1
 pytest-cov==2.5.1
-responses==0.8.0
+responses==0.8.1
