@@ -23,16 +23,13 @@ class Request:
     def receive_html(self, url):
         html = self.cache.read(url)
         if not html:
-            self._delay()
+            time.sleep(random.uniform(self.delay[0], self.delay[1]))
 
             html = self._from_url(url)
 
             self.cache.write(url, html)
 
         return html
-
-    def _delay(self):
-        time.sleep(random.uniform(self.delay[0], self.delay[1]))
 
     def _from_url(self, url):
         try:
