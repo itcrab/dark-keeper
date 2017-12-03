@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 from .exceptions import DarkKeeperCacheReadError
 
 
-class Cache(object):
+class Cache:
     cache_dir = None
 
     def read(self, url):

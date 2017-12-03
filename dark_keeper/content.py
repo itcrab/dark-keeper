@@ -4,7 +4,7 @@ from .exceptions import DarkKeeperParseContentError
 from .request import Request
 
 
-class Content(object):
+class Content:
     content = None
 
     def get_content(self):

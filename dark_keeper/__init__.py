@@ -4,7 +4,7 @@ from .request import Request
 from .storages import UrlsStorage, DataStorage
 
 
-class DarkKeeper(object):
+class DarkKeeper:
     """
     Dark Keeper is simple web-parser for podcast-sites.
     """

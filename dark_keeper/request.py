@@ -8,7 +8,7 @@ from .cache import Cache
 from .exceptions import DarkKeeperRequestResponseError
 
 
-class Request(object):
+class Request:
     def __init__(self, delay, user_agent=None):
         self.delay = delay if isinstance(delay, list) and len(delay) == 2 else [1, 2]
 

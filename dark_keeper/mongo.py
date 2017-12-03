@@ -4,7 +4,7 @@ from datetime import datetime
 from pymongo import MongoClient
 
 
-class ExportMongo(object):
+class ExportMongo:
     def __init__(self, mongo_uri):
         self.mongo_uri = mongo_uri
         self.mongo_coll = get_mongo_collection(self.mongo_uri)
@@ -27,7 +27,7 @@ class ExportMongo(object):
         return self.mongo_coll.name
 
 
-class LogMongo(object):
+class LogMongo:
     def __init__(self, mongo_uri):
         self.mongo_uri = '{}_log'.format(mongo_uri)
         self.mongo_coll = get_mongo_collection(self.mongo_uri)
