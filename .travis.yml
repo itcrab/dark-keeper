@@ -1,3 +1,5 @@
+sudo: false
+
 language: python
 
 python:
@@ -16,7 +18,7 @@ before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 script:
-  - py.test --cov=dark_keeper
+  - py.test
 
 after_success:
-  - coveralls
+  - codecov --token=e854bba4-8a64-4486-b4b5-faeb08368841
