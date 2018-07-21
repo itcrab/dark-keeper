@@ -1,3 +1,5 @@
+from unittest import mock
+
 import lxml.html
 from pytest import raises
 
@@ -7,8 +9,9 @@ from dark_keeper.request import Request
 
 
 class TestContent:
-    def test_create_content_good(self, monkeypatch, html_mock):
-        monkeypatch.setattr('requests.get', html_mock)
+    @mock.patch('requests.get')
+    def test_create_content_good(self, mock_get, html_mock):
+        mock_get.return_value.content = html_mock
 
         url = 'https://talkpython.fm.mock/episodes/all'
 
@@ -35,8 +38,9 @@ class TestContent:
         with raises(DarkKeeperParseContentError):
             content.set_content(None)
 
-    def test_parse_functions(self, monkeypatch, html_mock):
-        monkeypatch.setattr('requests.get', html_mock)
+    @mock.patch('requests.get')
+    def test_parse_functions(self, mock_get, html_mock):
+        mock_get.return_value.content = html_mock
 
         urls_for_parse = [
             'https://talkpython.fm/episodes/all',
