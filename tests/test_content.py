@@ -1,5 +1,4 @@
 import lxml.html
-import responses
 from pytest import raises
 
 from dark_keeper.content import Content
@@ -8,12 +7,10 @@ from dark_keeper.request import Request
 
 
 class TestContent:
-    @responses.activate
-    def test_create_content_good(self, html_mock):
+    def test_create_content_good(self, monkeypatch, html_mock):
+        monkeypatch.setattr('requests.get', html_mock)
+
         url = 'https://talkpython.fm.mock/episodes/all'
-        responses.add(responses.GET, url,
-                    body=html_mock, status=200,
-                    content_type='text/html')
 
         request = Request(
             [1, 2],
@@ -38,8 +35,9 @@ class TestContent:
         with raises(DarkKeeperParseContentError):
             content.set_content(None)
 
-    @responses.activate
-    def test_parse_functions(self, html_mock):
+    def test_parse_functions(self, monkeypatch, html_mock):
+        monkeypatch.setattr('requests.get', html_mock)
+
         urls_for_parse = [
             'https://talkpython.fm/episodes/all',
             'https://talkpython.fm/episodes/show/79/beeware-python-tools',
@@ -54,9 +52,6 @@ class TestContent:
         ]
 
         url = 'https://talkpython.fm.mock/episodes/all'
-        responses.add(responses.GET, url,
-                    body=html_mock, status=200,
-                    content_type='text/html')
 
         request = Request(
             [1, 2],

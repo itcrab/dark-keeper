@@ -2,4 +2,3 @@
 pytest==3.3.0
 pytest-cov==2.5.1
 codecov==2.0.15
-responses==0.8.1

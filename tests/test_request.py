@@ -1,5 +1,7 @@
+from unittest import mock
+
 import pytest
-import responses
+from requests import HTTPError
 
 from dark_keeper.exceptions import DarkKeeperRequestResponseError
 from dark_keeper.request import Request
@@ -14,11 +16,9 @@ class TestRequest:
             'Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
         )
 
-    @responses.activate
-    def test_receive_html(self, html_mock, monkeypatch):
-        responses.add(responses.GET, 'https://talkpython.fm.mock/episodes/all',
-                    body=html_mock, status=200,
-                    content_type='text/html')
+    @mock.patch('requests.get')
+    def test_receive_html(self, mock_get, html_mock, monkeypatch):
+        mock_get.return_value.content = html_mock
 
         url = 'https://talkpython.fm.mock/episodes/all'
 
@@ -60,11 +60,9 @@ class TestRequest:
                 main_url=urls[url], path=url
             )
 
-    @responses.activate
-    def test_from_url_raise(self, url):
-        responses.add(responses.GET, url,
-                    json={'error': 'not found'}, status=404,
-                    content_type='text/html')
+    @mock.patch('requests.models.Response.raise_for_status')
+    def test_from_url_raise(self, raise_for_status):
+        raise_for_status.side_effect = HTTPError()
 
         with pytest.raises(DarkKeeperRequestResponseError):
-            self.request._from_url(url)
+            self.request._from_url('http://site.com')

@@ -1,17 +1,12 @@
 from collections import OrderedDict
 
-import responses
-
 from dark_keeper import DarkKeeper
 from dark_keeper.mongo import get_mongo_collection
 
 
 class TestKeeper:
-    @responses.activate
-    def test_dark_keeper(self, html_mock):
-        responses.add(responses.GET, 'https://talkpython.fm.mock/episodes/all',
-                    body=html_mock, status=200,
-                    content_type='text/html')
+    def test_dark_keeper(self, monkeypatch, html_mock):
+        monkeypatch.setattr('requests.get', html_mock)
 
         dkt = DarkKeeperTest()
         dkt.run()
