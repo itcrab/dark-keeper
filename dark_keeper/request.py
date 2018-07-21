@@ -35,7 +35,7 @@ class Request:
         try:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.HTTPError as e:
             raise DarkKeeperRequestResponseError(e)
 
         html = response.content
