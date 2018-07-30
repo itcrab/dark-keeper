@@ -1,4 +1,4 @@
-|Coverage Status|
+|Build Status| |Coverage Status|
 
 Dark Keeper
 ===========
@@ -59,5 +59,7 @@ Quick start
         pk = PodcastKeeper()
         pk.run()
 
+.. |Build Status| image:: https://travis-ci.org/itcrab/dark-keeper.svg?branch=master
+    :target: https://travis-ci.org/itcrab/dark-keeper
 .. |Coverage Status| image:: https://codecov.io/gh/itcrab/dark-keeper/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/itcrab/dark-keeper

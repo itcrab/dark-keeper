@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/itcrab/dark-keeper.svg?branch=master)](https://travis-ci.org/itcrab/dark-keeper)
 [![codecov](https://codecov.io/gh/itcrab/dark-keeper/branch/master/graph/badge.svg)](https://codecov.io/gh/itcrab/dark-keeper)
 
 # Dark Keeper
