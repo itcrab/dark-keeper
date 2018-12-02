@@ -60,9 +60,9 @@ class TestRequest:
                 main_url=urls[url], path=url
             )
 
-    @mock.patch('requests.models.Response.raise_for_status')
-    def test_from_url_raise(self, raise_for_status, url):
-        raise_for_status.side_effect = HTTPError()
+    @mock.patch('requests.get')
+    def test_from_url_raise(self, mock_get, url):
+        mock_get.return_value.raise_for_status.side_effect = HTTPError()
 
         with pytest.raises(DarkKeeperRequestResponseError):
             self.request._from_url(url)
