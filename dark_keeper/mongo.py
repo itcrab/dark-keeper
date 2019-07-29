@@ -17,7 +17,7 @@ class ExportMongo:
             )
         )
 
-        if self.mongo_coll.count():
+        if self.mongo_coll.count_documents(filter={}):
             self.mongo_coll.drop()
 
         self.mongo_coll.insert_many(data)
