@@ -17,7 +17,7 @@ class TestKeeper:
 
         mongo_uri = 'mongodb://localhost/podcasts_tests/talkpython.fm'
         mongo_coll = get_mongo_collection(mongo_uri)
-        assert mongo_coll.count() == 1
+        assert mongo_coll.count_documents(filter={}) == 1
 
         mongo_data = mongo_coll.find_one()
         assert mongo_data['title'] == 'title one'
