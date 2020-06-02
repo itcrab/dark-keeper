@@ -12,9 +12,7 @@ services:
 
 install:
   - pip install -r test_requirements.txt
-
-before_script:
-  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - pip install -e .
 
 script:
   - py.test
