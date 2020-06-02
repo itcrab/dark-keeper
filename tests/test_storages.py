@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from dark_keeper.content import Content
 from dark_keeper.storages import UrlsStorage, DataStorage
 
@@ -60,17 +58,18 @@ class TestStorage:
         content = Content()
         content.set_content(html_mock)
 
-        data = OrderedDict()
-        data['title'] = content.parse_text('.show-episode-page h1')
-        data['desc'] = content.parse_text('.large-content-text')
-        data['mp3'] = content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href')
+        data = dict(
+            title=content.parse_text('.show-episode-page h1'),
+            desc=content.parse_text('.large-content-text'),
+            mp3=content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href'),
+        )
 
         data_storage.write(data)
 
         assert data_storage == [
-            OrderedDict([
-                ('title', 'title one'),
-                ('desc', 'desc one'),
-                ('mp3', '/mp3/podcast_0.mp3')
-            ])
+            dict(
+                title='title one',
+                desc='desc one',
+                mp3='/mp3/podcast_0.mp3',
+            )
         ]

@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from dark_keeper.content import Content
 from dark_keeper.mongo import LogMongo, ExportMongo, get_mongo_collection
 from dark_keeper.storages import DataStorage
@@ -12,10 +10,11 @@ class TestExports:
         content = Content()
         content.set_content(html_mock)
 
-        data = OrderedDict()
-        data['title'] = content.parse_text('.show-episode-page h1')
-        data['desc'] = content.parse_text('.large-content-text')
-        data['mp3'] = content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href')
+        data = dict(
+            title=content.parse_text('.show-episode-page h1'),
+            desc=content.parse_text('.large-content-text'),
+            mp3=content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href'),
+        )
 
         data_storage.write(data)
 

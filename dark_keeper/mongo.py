@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from datetime import datetime
 
 from pymongo import MongoClient
@@ -40,11 +39,9 @@ class LogMongo:
         self.export_mongo('info', msg, created)
 
     def export_mongo(self, level, msg, created):
-        self.mongo_coll.insert_one(OrderedDict([
-            ('level', level),
-            ('message', msg),
-            ('created', created)
-        ]))
+        self.mongo_coll.insert_one(
+            dict(level=level, message=msg, created=created)
+        )
 
 
 def get_mongo_collection(uri):

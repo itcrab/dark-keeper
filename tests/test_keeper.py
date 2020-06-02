@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from unittest import mock
 
 from dark_keeper import DarkKeeper
@@ -33,8 +32,9 @@ class DarkKeeperTest(DarkKeeper):
         return []
 
     def parse_data(self, content):
-        data = OrderedDict()
-        data['title'] = content.parse_text('.entry .show-episode-page h1')
-        data['mp3'] = content.parse_attr('.entry .episode-buttons a', 'href')
+        data = dict(
+            title=content.parse_text('.entry .show-episode-page h1'),
+            mp3=content.parse_attr('.entry .episode-buttons a', 'href'),
+        )
 
         return data
