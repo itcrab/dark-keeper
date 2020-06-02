@@ -35,23 +35,27 @@ Quick start
 
 
     class PodcastKeeper(DarkKeeper):
-        base_url = 'https://radio-t.com/archives/'
+        base_url = 'https://radio-t.com/'
         mongo_uri = 'mongodb://localhost/podcasts/radio-t.com'
 
         def parse_urls(self, content):
-            urls = content.parse_urls('.blog-archives .blog-archives-post .number-title a', self.base_url)
+            urls = content.parse_urls('.posts-list > .container-fluid .text-left a', self.base_url)
 
             return urls
 
         def parse_data(self, content):
-            data = dict(
-                title=content.parse_text('.post-podcast .number-title'),
-                desc=content.parse_text('.post-podcast .post-podcast-content'),
-                mp3=content.parse_attr('.post-podcast .post-podcast-content audio', 'src'),
-            )
+            data = []
+            for post_item in content.get_block_items('.posts-list .posts-list-item'):
+                post_data = dict(
+                    title=post_item.parse_text('.number-title'),
+                    desc=post_item.parse_text('.post-podcast-content'),
+                    mp3=post_item.parse_attr('.post-podcast-content audio', 'src'),
+                )
 
-            if data['title'] and data['mp3']:
-                return data
+                if post_data['title'] and post_data['mp3']:
+                    data.append(post_data)
+
+            return data
 
 
     if __name__ == '__main__':

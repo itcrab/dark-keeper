@@ -16,6 +16,9 @@ class Content:
         except Exception as e:
             raise DarkKeeperParseContentError(e)
 
+    def set_content_raw(self, raw):
+        self.content = raw
+
     def parse_urls(self, css_selector, base_url):
         start_url = Request.calculate_start_url(base_url)
 
@@ -46,3 +49,15 @@ class Content:
         attr = tags[0].get(css_attr)
         if attr:
             return attr.strip()
+
+    def get_block_items(self, css_selector):
+        items = self.content.cssselect(css_selector)
+
+        block_items = []
+        for item in items:
+            content = Content()
+            content.set_content_raw(item)
+
+            block_items.append(content)
+
+        return block_items
