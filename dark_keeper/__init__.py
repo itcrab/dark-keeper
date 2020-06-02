@@ -18,9 +18,9 @@ class DarkKeeper:
         self.log_mongo = LogMongo(self.mongo_uri)
         self.request = Request(
             delay=[1, 2],
-            user_agent='Mozilla/5.0 (Windows NT 10.0; WOW64) '
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                        'AppleWebKit/537.36 (KHTML, like Gecko) '
-                       'Chrome/61.0.3163.91 Safari/537.36 OPR/48.0.2685.32'
+                       'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
         )
         self.content = Content()
 
