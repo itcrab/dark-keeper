@@ -5,7 +5,7 @@ import time
 
 import requests
 
-from dark_keeper.exceptions import DarkKeeperRequestResponseError, DarkKeeperCacheReadError
+from dark_keeper.exceptions import DarkKeeperRequestResponseError, DarkKeeperCacheReadError, DarkKeeperCacheWriteError
 
 
 def cache_on(func):
@@ -32,7 +32,7 @@ def cache_on(func):
                 try:
                     f.write(resp)
                 except IOError as e:
-                    raise DarkKeeperCacheReadError(e)
+                    raise DarkKeeperCacheWriteError(e)
 
             return resp
     return wrapper
