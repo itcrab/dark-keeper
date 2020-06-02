@@ -1,6 +1,6 @@
 from .content import Content
+from .http import HttpClient
 from .mongo import ExportMongo, LogMongo
-from .request import Request
 from .storages import UrlsStorage, DataStorage
 
 
@@ -16,8 +16,8 @@ class DarkKeeper:
         self.data_storage = DataStorage()
         self.export_mongo = ExportMongo(self.mongo_uri)
         self.log_mongo = LogMongo(self.mongo_uri)
-        self.request = Request(
-            delay=[1, 2],
+        self.http_client = HttpClient(
+            delay=2,
             user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                        'AppleWebKit/537.36 (KHTML, like Gecko) '
                        'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
@@ -32,7 +32,7 @@ class DarkKeeper:
                 index=index, url=url
             ))
 
-            html = self.request.receive_html(url)
+            html = self.http_client.get(url)
             self.content.set_content(html)
 
             urls = self.parse_urls(self.content)

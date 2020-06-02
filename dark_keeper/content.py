@@ -1,7 +1,8 @@
+from urllib.parse import urljoin
+
 import lxml.html
 
 from .exceptions import DarkKeeperParseContentError
-from .request import Request
 
 
 class Content:
@@ -20,15 +21,15 @@ class Content:
         self.content = raw
 
     def parse_urls(self, css_selector, base_url):
-        start_url = Request.calculate_start_url(base_url)
-
         urls = []
         for link in self.content.cssselect(css_selector):
             url = link.get('href')
             if not url:
                 continue
 
-            url = Request.normalize_url(url, start_url)
+            if url.startswith('/'):
+                url = urljoin(base_url, url)
+
             if url not in urls:
                 urls.append(url)
 
