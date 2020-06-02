@@ -31,8 +31,6 @@ Quick start
 
 .. code:: python
 
-    from collections import OrderedDict
-
     from dark_keeper import DarkKeeper
 
 
@@ -46,10 +44,11 @@ Quick start
             return urls
 
         def parse_data(self, content):
-            data = OrderedDict()
-            data['title'] = content.parse_text('.hentry .entry-title')
-            data['desc'] = content.parse_text('.hentry .entry-content')
-            data['mp3'] = content.parse_attr('.hentry audio', 'src')
+            data = dict(
+                title=content.parse_text('.hentry .entry-title'),
+                desc=content.parse_text('.hentry .entry-content'),
+                mp3=content.parse_attr('.hentry audio', 'src'),
+            )
 
             if data['title'] and data['mp3']:
                 return data
