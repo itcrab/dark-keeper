@@ -42,11 +42,7 @@ class DarkKeeper:
             self.urls_storage.write(urls)
 
             data = self.parse_data(content)
-            if isinstance(data, dict):
-                self.data_storage.write(data)
-            elif isinstance(data, list):
-                for data_item in data:
-                    self.data_storage.write(data_item)
+            self.data_storage.write(data)
 
         logger.info('Parsing is finished.')
 
