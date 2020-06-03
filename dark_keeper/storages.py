@@ -1,5 +1,6 @@
 class UrlsStorage(list):
     def __init__(self, base_url, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.append(base_url)
 
     def write(self, urls):
