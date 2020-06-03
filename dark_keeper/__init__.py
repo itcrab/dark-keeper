@@ -1,9 +1,9 @@
 import logging
 
-from .content import Content
 from .handlers import DATE_TIME_FORMAT, MongoHandler
 from .http import HttpClient
 from .mongo import ExportMongo
+from .parsers import ContentParser
 from .storages import UrlsStorage, DataStorage
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,6 @@ class DarkKeeper:
                        'AppleWebKit/537.36 (KHTML, like Gecko) '
                        'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
         )
-        self.content = Content()
 
     def run(self):
         logger.info('Parsing is started.')
@@ -37,12 +36,12 @@ class DarkKeeper:
             logger.info('link #%s: %s', index, url)
 
             html = self.http_client.get(url)
-            self.content.set_content(html)
+            content = ContentParser(html)
 
-            urls = self.parse_urls(self.content)
+            urls = self.parse_urls(content)
             self.urls_storage.write(urls)
 
-            data = self.parse_data(self.content)
+            data = self.parse_data(content)
             if isinstance(data, dict):
                 self.data_storage.write(data)
             elif isinstance(data, list):

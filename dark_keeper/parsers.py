@@ -5,20 +5,15 @@ import lxml.html
 from .exceptions import DarkKeeperParseContentError
 
 
-class Content:
-    content = None
-
-    def get_content(self):
-        return self.content
-
-    def set_content(self, html):
-        try:
-            self.content = lxml.html.fromstring(html)
-        except Exception as e:
-            raise DarkKeeperParseContentError(e)
-
-    def set_content_raw(self, raw):
-        self.content = raw
+class ContentParser:
+    def __init__(self, data):
+        if isinstance(data, bytes):
+            try:
+                self.content = lxml.html.fromstring(data)
+            except Exception as e:
+                raise DarkKeeperParseContentError(e)
+        elif isinstance(data, lxml.html.HtmlElement):
+            self.content = data
 
     def parse_urls(self, css_selector, base_url):
         urls = []
@@ -52,13 +47,8 @@ class Content:
             return attr.strip()
 
     def get_block_items(self, css_selector):
-        items = self.content.cssselect(css_selector)
-
         block_items = []
-        for item in items:
-            content = Content()
-            content.set_content_raw(item)
-
-            block_items.append(content)
+        for item in self.content.cssselect(css_selector):
+            block_items.append(ContentParser(item))
 
         return block_items
