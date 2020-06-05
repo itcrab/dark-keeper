@@ -5,7 +5,7 @@ import time
 
 import requests
 
-from dark_keeper.exceptions import DarkKeeperRequestResponseError, DarkKeeperCacheReadError, DarkKeeperCacheWriteError
+from .exceptions import DarkKeeperRequestResponseError, DarkKeeperCacheReadError, DarkKeeperCacheWriteError
 
 
 def cache_on(func):

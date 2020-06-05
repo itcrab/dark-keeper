@@ -28,3 +28,11 @@ class DarkKeeperRequestError(DarkKeeperError):
 
 class DarkKeeperRequestResponseError(DarkKeeperRequestError):
     pass
+
+
+class DarkKeeperMongoError(DarkKeeperError):
+    pass
+
+
+class DarkKeeperParseUriMongoError(DarkKeeperMongoError):
+    pass

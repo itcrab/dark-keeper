@@ -1,6 +1,6 @@
 import pytest
 
-from dark_keeper import UrlsStorage, DataStorage
+from dark_keeper.storages import UrlsStorage, DataStorage
 
 
 class TestUrlsStorage:

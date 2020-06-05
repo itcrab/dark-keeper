@@ -36,10 +36,10 @@ Quick start
 
     class PodcastKeeper(DarkKeeper):
         base_url = 'https://radio-t.com/'
-        mongo_uri = 'mongodb://localhost/podcasts/radio-t.com'
+        mongo_uri = 'mongodb://localhost/podcasts.radio-t.com'
 
         def parse_urls(self, content):
-            urls = content.parse_urls('.posts-list > .container-fluid .text-left a', self.base_url)
+            urls = content.parse_urls('.posts-list > .container-fluid .text-left a')
 
             return urls
 

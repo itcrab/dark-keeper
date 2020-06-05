@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from dark_keeper.mongo import get_mongo_collection
+from .mongo import get_mongo_collection
 
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 

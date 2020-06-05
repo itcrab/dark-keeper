@@ -3,8 +3,8 @@ from urllib.parse import urljoin
 import lxml.html
 import pytest
 
-from dark_keeper import ContentParser
 from dark_keeper.exceptions import DarkKeeperParseContentError
+from dark_keeper.parsers import ContentParser
 from tests.fixtures import raise_exception
 
 
@@ -81,13 +81,13 @@ class TestContentParser:
     def test_content_parser_get_block_parse_text_podcast_item(self, podcasts_page_1_html, base_url):
         right_data = [{
             'card-header': 'Podcast 1 Title',
-            'card-body': "Podcast 1 Themes\n                Podcast 1 Description.\n                podcast_1.mp3",
+            'card-body': 'Podcast 1 Themes\n                Podcast 1 Description.\n                podcast_1.mp3',
         }, {
             'card-header': 'Podcast 2 Title',
-            'card-body': "Podcast 2 Themes\n                Podcast 2 Description.\n                podcast_2.mp3",
+            'card-body': 'Podcast 2 Themes\n                Podcast 2 Description.\n                podcast_2.mp3',
         },{
             'card-header': 'Podcast 3 Title',
-            'card-body': "Podcast 3 Themes\n                Podcast 3 Description.\n                podcast_3.mp3",
+            'card-body': 'Podcast 3 Themes\n                Podcast 3 Description.\n                podcast_3.mp3',
         }]
 
         content = ContentParser(podcasts_page_1_html, base_url)
