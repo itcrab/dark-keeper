@@ -23,5 +23,5 @@ def mongo_uri():
     return 'mongodb://localhost/podcasts.podcast-site.com'
 
 
-def raise_exception(*args, **kwargs):
-    raise Exception('Error.')
+def raise_exception(*args, exc_type=Exception, exc_msg='Error.', **kwargs):
+    raise exc_type(exc_msg)

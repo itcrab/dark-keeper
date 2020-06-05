@@ -14,13 +14,11 @@ def cache_on(func):
         cache_path = os.path.join(os.getcwd(), 'cache', f'{cache_key}.html')
 
         if os.path.isfile(cache_path):
-            with open(cache_path, 'rb') as f:
-                try:
-                    html = f.read()
-                except IOError as e:
-                    raise DarkKeeperCacheReadError(e)
-
-                return html
+            try:
+                with open(cache_path, 'rb') as f:
+                    return f.read()
+            except (FileNotFoundError, IOError) as e:
+                raise DarkKeeperCacheReadError(e)
         else:
             resp = func(*args, **kwargs)
 
@@ -28,11 +26,11 @@ def cache_on(func):
             if not os.path.isdir(cache_dir):
                 os.makedirs(cache_dir, exist_ok=True)
 
-            with open(cache_path, 'wb') as f:
-                try:
+            try:
+                with open(cache_path, 'wb') as f:
                     f.write(resp)
-                except IOError as e:
-                    raise DarkKeeperCacheWriteError(e)
+            except (FileNotFoundError, IOError) as e:
+                raise DarkKeeperCacheWriteError(e)
 
             return resp
     return wrapper
@@ -57,7 +55,7 @@ class HttpClient:
         try:
             response = getattr(requests, method)(url, headers=self.headers)
             response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
+        except requests.exceptions.RequestException as e:
             raise DarkKeeperRequestResponseError(e)
 
         time.sleep(random.uniform(self.min_delay, self.max_delay))
