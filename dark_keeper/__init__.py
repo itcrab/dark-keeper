@@ -36,7 +36,7 @@ class DarkKeeper:
             logger.info('link #%s: %s', index, url)
 
             html = self.http_client.get(url)
-            content = ContentParser(html)
+            content = ContentParser(html, self.base_url)
 
             urls = self.parse_urls(content)
             self.urls_storage.write(urls)
@@ -58,7 +58,7 @@ class DarkKeeper:
         self.export_mongo.export(data)
 
     def _setup_logger(self):
-        logging.basicConfig(
+        config_kwargs = dict(
             format='%(asctime)s %(message)s',
             datefmt=DATE_TIME_FORMAT,
             level=logging.INFO,
@@ -67,3 +67,4 @@ class DarkKeeper:
                 MongoHandler(mongo_uri=f'{self.mongo_uri}_log')
             ],
         )
+        logging.basicConfig(**config_kwargs)

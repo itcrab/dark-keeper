@@ -1,29 +1,27 @@
-from urllib.parse import urljoin
-
 import lxml.html
 
 from .exceptions import DarkKeeperParseContentError
 
 
 class ContentParser:
-    def __init__(self, data):
+    def __init__(self, data, base_url):
+        self.base_url = base_url
+
         if isinstance(data, bytes):
             try:
-                self.content = lxml.html.fromstring(data)
+                self.content = lxml.html.fromstring(data, base_url)
+                self.content.make_links_absolute()
             except Exception as e:
                 raise DarkKeeperParseContentError(e)
         elif isinstance(data, lxml.html.HtmlElement):
             self.content = data
 
-    def parse_urls(self, css_selector, base_url):
+    def parse_urls(self, css_selector):
         urls = []
         for link in self.content.cssselect(css_selector):
             url = link.get('href')
             if not url:
                 continue
-
-            if url.startswith('/'):
-                url = urljoin(base_url, url)
 
             if url not in urls:
                 urls.append(url)
@@ -49,6 +47,6 @@ class ContentParser:
     def get_block_items(self, css_selector):
         block_items = []
         for item in self.content.cssselect(css_selector):
-            block_items.append(ContentParser(item))
+            block_items.append(ContentParser(item, self.base_url))
 
         return block_items
