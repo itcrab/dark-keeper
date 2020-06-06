@@ -20,8 +20,12 @@ def base_url():
 
 @pytest.fixture
 def mongo_uri():
-    return 'mongodb://localhost/podcasts.podcast-site.com'
+    return mongo_uri_raw()
 
 
 def raise_exception(*args, exc_type=Exception, exc_msg='Error.', **kwargs):
     raise exc_type(exc_msg)
+
+
+def mongo_uri_raw():
+    return 'mongodb://localhost/podcasts.podcast-site.com'
