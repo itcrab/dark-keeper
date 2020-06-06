@@ -19,11 +19,12 @@ class MongoHandler(logging.Handler):
         self.emit(record)
 
     def emit(self, record):
+        created = datetime.strftime(datetime.now(), DATE_TIME_FORMAT)
         self.mongo_coll.insert_one(dict(
             level=record.levelname,
-            message=self.format(record),
-            created=datetime.strftime(datetime.now(), DATE_TIME_FORMAT)),
-        )
+            message='%s %s' % (created, record.getMessage()),
+            created=created,
+        ))
 
     def createLock(self):
         self.lock = None

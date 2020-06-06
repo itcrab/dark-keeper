@@ -64,7 +64,7 @@ class DarkKeeper:
             level=logging.INFO,
             handlers=[
                 logging.StreamHandler(),
-                MongoHandler(mongo_uri=f'{self.mongo_uri}_log')
+                MongoHandler(mongo_uri=f'{self.mongo_uri}_log'),
             ],
         )
         logging.basicConfig(**config_kwargs)
