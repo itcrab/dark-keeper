@@ -17,7 +17,7 @@ class TestContentParser:
         monkeypatch.setattr(lxml.html, 'fromstring', raise_exception)
         with pytest.raises(DarkKeeperParseContentError) as e:
             content = ContentParser(podcasts_page_1_html, base_url)
-        assert str(e) == '<ExceptionInfo DarkKeeperParseContentError(Exception(\'Error.\')) tblen=2>'
+        assert str(e.value) == 'Exception error.'
 
     def test_content_parser_html_element(self, podcasts_page_1_html, base_url):
         html_element = lxml.html.fromstring(podcasts_page_1_html)

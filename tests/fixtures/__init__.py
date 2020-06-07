@@ -23,7 +23,7 @@ def mongo_uri():
     return mongo_uri_raw()
 
 
-def raise_exception(*args, exc_type=Exception, exc_msg='Error.', **kwargs):
+def raise_exception(*args, exc_type=Exception, exc_msg='Exception error.', **kwargs):
     raise exc_type(exc_msg)
 
 
