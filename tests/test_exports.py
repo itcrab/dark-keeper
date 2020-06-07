@@ -14,7 +14,7 @@ class TestExportMongo:
         if self.mongo_coll.count_documents(filter={}):
             self.mongo_coll.drop()
 
-    def test_eport_mongo(self, mongo_uri, base_url):
+    def test_export_mongo(self, mongo_uri, base_url):
         logs_count = self.mongo_coll.count_documents(filter={})
         assert logs_count == 0
 
@@ -28,7 +28,7 @@ class TestExportMongo:
         mongo_data = self.mongo_coll.find_one()
         assert mongo_data == export_data[0]
 
-    def test_eport_mongo_two_calls(self, mongo_uri, base_url):
+    def test_export_mongo_two_calls(self, mongo_uri, base_url):
         logs_count = self.mongo_coll.count_documents(filter={})
         assert logs_count == 0
 

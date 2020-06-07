@@ -1,5 +1,6 @@
 import logging
 
+from .exceptions import DarkKeeperValidationError
 from .exports import ExportMongo
 from .handlers import DATE_TIME_FORMAT, MongoHandler
 from .http import HttpClient
@@ -17,6 +18,7 @@ class DarkKeeper:
     mongo_uri = None
 
     def __init__(self):
+        self._self_validate()
         self._setup_logger()
 
         self.urls_storage = UrlsStorage(self.base_url)
@@ -49,13 +51,19 @@ class DarkKeeper:
         self.export_data(self.data_storage)
 
     def parse_urls(self, content):
-        raise NotImplementedError('You must implemented "parse_urls" method!')
+        raise NotImplementedError('You must implemented `parse_urls` method!')
 
     def parse_data(self, content):
-        raise NotImplementedError('You must implemented "parse_data" method!')
+        raise NotImplementedError('You must implemented `parse_data` method!')
 
     def export_data(self, data):
         self.export_mongo.export(data)
+
+    def _self_validate(self):
+        if self.base_url is None:
+            raise DarkKeeperValidationError('You must set `base_url` property!')
+        if self.mongo_uri is None:
+            raise DarkKeeperValidationError('You must set `mongo_uri` property!')
 
     def _setup_logger(self):
         config_kwargs = dict(

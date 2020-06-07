@@ -2,6 +2,10 @@ class DarkKeeperError(Exception):
     pass
 
 
+class DarkKeeperValidationError(DarkKeeperError):
+    pass
+
+
 class DarkKeeperCacheError(DarkKeeperError):
     pass
 
