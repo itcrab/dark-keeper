@@ -1,8 +1,9 @@
 import logging
 
+from .exceptions import DarkKeeperValidationError
+from .exports import ExportMongo
 from .handlers import DATE_TIME_FORMAT, MongoHandler
 from .http import HttpClient
-from .mongo import ExportMongo
 from .parsers import ContentParser
 from .storages import UrlsStorage, DataStorage
 
@@ -17,6 +18,7 @@ class DarkKeeper:
     mongo_uri = None
 
     def __init__(self):
+        self._self_validate()
         self._setup_logger()
 
         self.urls_storage = UrlsStorage(self.base_url)
@@ -36,38 +38,41 @@ class DarkKeeper:
             logger.info('link #%s: %s', index, url)
 
             html = self.http_client.get(url)
-            content = ContentParser(html)
+            content = ContentParser(html, self.base_url)
 
             urls = self.parse_urls(content)
             self.urls_storage.write(urls)
 
             data = self.parse_data(content)
-            if isinstance(data, dict):
-                self.data_storage.write(data)
-            elif isinstance(data, list):
-                for data_item in data:
-                    self.data_storage.write(data_item)
+            self.data_storage.write(data)
 
         logger.info('Parsing is finished.')
 
         self.export_data(self.data_storage)
 
     def parse_urls(self, content):
-        raise NotImplementedError('You must implemented "parse_urls" method!')
+        raise NotImplementedError('You must implemented `parse_urls` method!')
 
     def parse_data(self, content):
-        raise NotImplementedError('You must implemented "parse_data" method!')
+        raise NotImplementedError('You must implemented `parse_data` method!')
 
     def export_data(self, data):
         self.export_mongo.export(data)
 
+    def _self_validate(self):
+        if self.base_url is None:
+            raise DarkKeeperValidationError('You must set `base_url` property!')
+        if self.mongo_uri is None:
+            raise DarkKeeperValidationError('You must set `mongo_uri` property!')
+
     def _setup_logger(self):
-        logging.basicConfig(
+        config_kwargs = dict(
             format='%(asctime)s %(message)s',
             datefmt=DATE_TIME_FORMAT,
             level=logging.INFO,
             handlers=[
                 logging.StreamHandler(),
-                MongoHandler(mongo_uri=f'{self.mongo_uri}_log')
+                MongoHandler(mongo_uri=f'{self.mongo_uri}_log'),
             ],
         )
+        logging.basicConfig(**config_kwargs)

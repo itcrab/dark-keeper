@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from dark_keeper.mongo import get_mongo_collection
+from .mongo import get_mongo_collection
 
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
@@ -19,11 +19,12 @@ class MongoHandler(logging.Handler):
         self.emit(record)
 
     def emit(self, record):
+        created = datetime.strftime(datetime.now(), DATE_TIME_FORMAT)
         self.mongo_coll.insert_one(dict(
             level=record.levelname,
-            message=self.format(record),
-            created=datetime.strftime(datetime.now(), DATE_TIME_FORMAT)),
-        )
+            message='%s %s' % (created, record.getMessage()),
+            created=created,
+        ))
 
     def createLock(self):
         self.lock = None

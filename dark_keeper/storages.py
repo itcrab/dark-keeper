@@ -5,11 +5,15 @@ class UrlsStorage(list):
 
     def write(self, urls):
         for url in urls:
-            if url not in self:
-                self.append(url)
+            if isinstance(url, str) and url.strip() != '' and url not in self:
+                self.append(url)  # TODO: validating url
 
 
 class DataStorage(list):
     def write(self, data):
-        if data:
+        if data and isinstance(data, dict):
             self.append(data)
+        elif isinstance(data, list):
+            for data_item in data:
+                if data_item and isinstance(data_item, dict):
+                    self.append(data_item)
