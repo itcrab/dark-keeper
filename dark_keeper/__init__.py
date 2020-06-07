@@ -2,7 +2,7 @@ import logging
 
 from .exceptions import DarkKeeperValidationError
 from .exports import ExportMongo
-from .handlers import DATE_TIME_FORMAT, MongoHandler
+from .handlers import DATE_TIME_FORMAT, MongoHandler, LOG_FORMAT
 from .http import HttpClient
 from .parsers import ContentParser
 from .storages import UrlsStorage, DataStorage
@@ -67,7 +67,7 @@ class DarkKeeper:
 
     def _setup_logger(self):
         config_kwargs = dict(
-            format='%(asctime)s %(message)s',
+            format=LOG_FORMAT,
             datefmt=DATE_TIME_FORMAT,
             level=logging.INFO,
             handlers=[

@@ -2,7 +2,7 @@ import logging
 
 from freezegun import freeze_time
 
-from dark_keeper import DATE_TIME_FORMAT, MongoHandler
+from dark_keeper import DATE_TIME_FORMAT, MongoHandler, LOG_FORMAT
 from dark_keeper.mongo import get_mongo_collection
 from tests.fixtures import mongo_uri_raw
 
@@ -12,7 +12,7 @@ class TestHandlers:
     def setup_class(cls):
         cls.mongo_coll = get_mongo_collection(mongo_uri_raw())
         config_kwargs = dict(
-            format='%(asctime)s %(message)s',
+            format=LOG_FORMAT,
             datefmt=DATE_TIME_FORMAT,
             level=logging.INFO,
             handlers=[

@@ -4,12 +4,13 @@ from datetime import datetime
 from .mongo import get_mongo_collection
 
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+LOG_FORMAT = '%(asctime)s %(message)s'
 
 
 class MongoHandler(logging.Handler):
     def __init__(self, level=logging.NOTSET, mongo_uri=None):
         super().__init__(level)
-        self.formatter = logging.Formatter('%(asctime)s %(message)s', DATE_TIME_FORMAT, '%')
+        self.formatter = logging.Formatter(LOG_FORMAT, DATE_TIME_FORMAT, '%')
 
         self.mongo_coll = get_mongo_collection(mongo_uri)
         if self.mongo_coll.count_documents(filter={}):
