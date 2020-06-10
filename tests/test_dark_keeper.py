@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 
-from dark_keeper import DarkKeeperValidationError
+from dark_keeper import DarkKeeper
 from dark_keeper.mongo import get_mongo_collection
 from tests.fixtures import build_dark_keeper, mongo_uri_raw, build_dark_keeper_one_podcast
 
@@ -45,7 +45,7 @@ class TestDarkKeeper:
             'mp3': 'http://podcast-site.com/media/podcast_4.mp3'
         }]
 
-        dk = build_dark_keeper(base_url, mongo_uri)()
+        dk = build_dark_keeper(base_url, mongo_uri)
         dk.run()
 
         logs_count = self.mongo_coll.count_documents(filter={})
@@ -77,54 +77,8 @@ class TestDarkKeeper:
             'mp3': 'http://podcast-site.com/media/podcast_4.mp3'
         }]
 
-    def test_dark_keeper_no_parse_urls(self, base_url, mongo_uri, podcasts_page_2_html, tmpdir, monkeypatch):
-        monkeypatch.setattr(requests, 'get', lambda url, headers: MagicMock(
-            content=podcasts_page_2_html,
-            raise_for_status=lambda: False,
-        ))
-        monkeypatch.chdir(tmpdir)
-
-        dk = build_dark_keeper(base_url, mongo_uri)
-        delattr(dk, 'parse_urls')
-        with pytest.raises(NotImplementedError) as e:
-            dk().run()
-        assert str(e.value) == 'You must implemented `parse_urls` method!'
-
-        logs_count = self.mongo_coll.count_documents(filter={})
-        assert logs_count == 0
-
-    def test_dark_keeper_no_parse_data(self, base_url, mongo_uri, podcasts_page_2_html, tmpdir, monkeypatch):
-        monkeypatch.setattr(requests, 'get', lambda url, headers: MagicMock(
-            content=podcasts_page_2_html,
-            raise_for_status=lambda: False,
-        ))
-        monkeypatch.chdir(tmpdir)
-
-        dk = build_dark_keeper(base_url, mongo_uri)
-        delattr(dk, 'parse_data')
-        with pytest.raises(NotImplementedError) as e:
-            dk().run()
-        assert str(e.value) == 'You must implemented `parse_data` method!'
-
-        logs_count = self.mongo_coll.count_documents(filter={})
-        assert logs_count == 0
-
-    def test_dark_keeper_no_base_url(self, base_url, mongo_uri):
-        dk = build_dark_keeper(base_url, mongo_uri)
-        setattr(dk, 'base_url', None)
-        with pytest.raises(DarkKeeperValidationError) as e:
-            dk()
-        assert str(e.value) == 'You must set `base_url` property!'
-
-        logs_count = self.mongo_coll.count_documents(filter={})
-        assert logs_count == 0
-
-    def test_dark_keeper_no_mongo_uri(self, base_url, mongo_uri):
-        dk = build_dark_keeper(base_url, mongo_uri)
-        setattr(dk, 'mongo_uri', None)
-        with pytest.raises(DarkKeeperValidationError) as e:
-            dk()
-        assert str(e.value) == 'You must set `mongo_uri` property!'
-
-        logs_count = self.mongo_coll.count_documents(filter={})
-        assert logs_count == 0
+    def test_dark_keeper_without_all_arguments(self):
+        with pytest.raises(TypeError) as e:
+            dk = DarkKeeper()
+        assert str(e.value) == "__init__() missing 5 required positional arguments: " \
+                               "'http_client', 'parser', 'urls_storage', 'data_storage', and 'export_mongo'"

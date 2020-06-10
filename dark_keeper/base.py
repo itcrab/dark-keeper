@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class BaseDarkKeeper(ABC):
     @abstractmethod
-    def parse_content(self, url):
+    def build_content_from_url(self, from_url, base_url):
         raise NotImplementedError('Undefined method `build_content_from_url`!')
 
     @abstractmethod
@@ -17,3 +17,13 @@ class BaseDarkKeeper(ABC):
     @abstractmethod
     def export_data(self, data):
         raise NotImplementedError('Undefined method `export_data`!')
+
+
+class BaseParser(ABC):
+    @abstractmethod
+    def parse_urls(self, content):
+        raise NotImplementedError('You must implemented `parse_urls` method!')
+
+    @abstractmethod
+    def parse_data(self, content):
+        raise NotImplementedError('You must implemented `parse_data` method!')
