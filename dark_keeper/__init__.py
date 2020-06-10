@@ -1,5 +1,6 @@
 import logging
 
+from .base import BaseDarkKeeper
 from .exceptions import DarkKeeperValidationError
 from .exports import ExportMongo
 from .handlers import DATE_TIME_FORMAT, MongoHandler, LOG_FORMAT
@@ -10,7 +11,7 @@ from .storages import UrlsStorage, DataStorage
 logger = logging.getLogger(__name__)
 
 
-class DarkKeeper:
+class DarkKeeper(BaseDarkKeeper):
     """
     Dark Keeper is simple web-parser for podcast-sites.
     """
@@ -37,24 +38,27 @@ class DarkKeeper:
         for index, url in enumerate(self.urls_storage, start=1):
             logger.info('link #%s: %s', index, url)
 
-            html = self.http_client.get(url)
-            content = ContentParser(html, self.base_url)
-
-            urls = self.parse_urls(content)
-            self.urls_storage.write(urls)
-
-            data = self.parse_data(content)
-            self.data_storage.write(data)
-
-        logger.info('Parsing is finished.')
+            content = self.parse_content(url)
+            self.write_mew_urls(content)
+            self.write_new_data(content)
 
         self.export_data(self.data_storage)
 
-    def parse_urls(self, content):
-        raise NotImplementedError('You must implemented `parse_urls` method!')
+        logger.info('Parsing is finished.')
 
-    def parse_data(self, content):
-        raise NotImplementedError('You must implemented `parse_data` method!')
+    def parse_content(self, url):
+        html = self.http_client.get(url)
+        content = ContentParser(html, self.base_url)
+
+        return content
+
+    def write_mew_urls(self, content):
+        urls = self.parse_urls(content)
+        self.urls_storage.write(urls)
+
+    def write_new_data(self, content):
+        data = self.parse_data(content)
+        self.data_storage.write(data)
 
     def export_data(self, data):
         self.export_mongo.export(data)
