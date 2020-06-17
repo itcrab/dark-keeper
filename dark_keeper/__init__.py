@@ -1,6 +1,6 @@
 import logging
 
-from .base import BaseDarkKeeper
+from .base import BaseDarkKeeper, BaseHttpClient, BaseParser, BaseUrlsStorage, BaseDataStorage, BaseExportMongo
 from .exports import ExportMongo
 from .handlers import DATE_TIME_FORMAT, MongoHandler, LOG_FORMAT
 from .http import HttpClient
@@ -15,6 +15,8 @@ class DarkKeeper(BaseDarkKeeper):
     Dark Keeper is simple web-parser for podcast-sites.
     """
     def __init__(self, http_client, parser, urls_storage, data_storage, export_mongo):
+        self._validate_objects(http_client, parser, urls_storage, data_storage, export_mongo)
+
         self.http_client = http_client
         self.parser = parser
         self.urls_storage = urls_storage
@@ -51,3 +53,16 @@ class DarkKeeper(BaseDarkKeeper):
 
     def export_data(self, data):
         self.export_mongo.export(data)
+
+    def _validate_objects(self, http_client, parser, urls_storage, data_storage, export_mongo):
+        error_message = 'Class `{}` is not based on `{}`'
+
+        objects = [
+            (type(http_client), BaseHttpClient),
+            (type(parser), BaseParser),
+            (type(urls_storage), BaseUrlsStorage),
+            (type(data_storage), BaseDataStorage),
+            (type(export_mongo), BaseExportMongo),
+        ]
+        for check in objects:
+            assert issubclass(*check), error_message.format(*check)

@@ -64,8 +64,19 @@ def build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw):
     return dict(http_client=http_client, urls_storage=urls_storage, data_storage=data_storage, export_mongo=export_mongo)
 
 
+def build_mock_parser():
+    class MockParser(BaseParser):
+        def parse_urls(self, content):
+            return []
+
+        def parse_data(self, content):
+            return []
+
+    return MockParser()
+
+
 def build_dark_keeper(base_url_raw, mongo_uri_raw):
-    class TestParser(BaseParser):
+    class MockParser(BaseParser):
         def parse_urls(self, content):
             urls = content.parse_urls('nav.navigation .page-item a')
 
@@ -86,13 +97,13 @@ def build_dark_keeper(base_url_raw, mongo_uri_raw):
             return data
 
     dark_keeper_kwargs = build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw)
-    dark_keeper_kwargs['parser'] = TestParser()
+    dark_keeper_kwargs['parser'] = MockParser()
 
     return DarkKeeper(**dark_keeper_kwargs)
 
 
 def build_dark_keeper_one_podcast(base_url_raw, mongo_uri_raw):
-    class TestParser(BaseParser):
+    class MockParser(BaseParser):
         def parse_urls(self, content):
             return []
 
@@ -107,6 +118,6 @@ def build_dark_keeper_one_podcast(base_url_raw, mongo_uri_raw):
                 return post_data
 
     dark_keeper_kwargs = build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw)
-    dark_keeper_kwargs['parser'] = TestParser()
+    dark_keeper_kwargs['parser'] = MockParser()
 
     return DarkKeeper(**dark_keeper_kwargs)
