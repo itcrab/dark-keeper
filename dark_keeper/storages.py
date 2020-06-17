@@ -1,4 +1,7 @@
-class UrlsStorage(list):
+from dark_keeper.base import BaseUrlsStorage, BaseDataStorage
+
+
+class UrlsStorage(BaseUrlsStorage, list):
     def __init__(self, base_url, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.append(base_url)
@@ -9,7 +12,7 @@ class UrlsStorage(list):
                 self.append(url)  # TODO: validating url
 
 
-class DataStorage(list):
+class DataStorage(BaseDataStorage, list):
     def write(self, data):
         if data and isinstance(data, dict):
             self.append(data)

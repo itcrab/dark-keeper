@@ -5,6 +5,7 @@ import time
 
 import requests
 
+from .base import BaseHttpClient
 from .exceptions import DarkKeeperRequestResponseError, DarkKeeperCacheReadError, DarkKeeperCacheWriteError
 
 
@@ -36,7 +37,7 @@ def cache_on(func):
     return wrapper
 
 
-class HttpClient:
+class HttpClient(BaseHttpClient):
     def __init__(self, delay, user_agent=None):
         self.min_delay = delay - delay * 0.2
         self.max_delay = delay + delay * 0.2

@@ -1,5 +1,8 @@
 import pytest
 
+from dark_keeper import UrlsStorage, DataStorage, ExportMongo, HttpClient, DarkKeeper
+from dark_keeper.base import BaseParser
+
 
 @pytest.fixture
 def podcasts_page_1_html():
@@ -31,13 +34,33 @@ def mongo_uri_raw():
     return 'mongodb://localhost/podcasts.podcast-site.com'
 
 
+def build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw):
+    return dict(
+        http_client=HttpClient(
+            delay=0,
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                       'AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
+        ),
+        urls_storage=UrlsStorage(base_url=base_url_raw),
+        data_storage=DataStorage(),
+        export_mongo=ExportMongo(mongo_uri=mongo_uri_raw),
+    )
+
+
+def build_mock_parser():
+    class MockParser(BaseParser):
+        def parse_urls(self, content):
+            return []
+
+        def parse_data(self, content):
+            return []
+
+    return MockParser()
+
+
 def build_dark_keeper(base_url_raw, mongo_uri_raw):
-    from dark_keeper import DarkKeeper
-
-    class TestKeeper(DarkKeeper):
-        base_url = base_url_raw
-        mongo_uri = mongo_uri_raw
-
+    class MockParser(BaseParser):
         def parse_urls(self, content):
             urls = content.parse_urls('nav.navigation .page-item a')
 
@@ -57,16 +80,14 @@ def build_dark_keeper(base_url_raw, mongo_uri_raw):
 
             return data
 
-    return TestKeeper
+    dark_keeper_kwargs = build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw)
+    dark_keeper_kwargs['parser'] = MockParser()
+
+    return DarkKeeper(**dark_keeper_kwargs)
 
 
 def build_dark_keeper_one_podcast(base_url_raw, mongo_uri_raw):
-    from dark_keeper import DarkKeeper
-
-    class TestKeeper(DarkKeeper):
-        base_url = base_url_raw
-        mongo_uri = mongo_uri_raw
-
+    class MockParser(BaseParser):
         def parse_urls(self, content):
             return []
 
@@ -80,4 +101,7 @@ def build_dark_keeper_one_podcast(base_url_raw, mongo_uri_raw):
             if post_data['title'] and post_data['mp3']:
                 return post_data
 
-    return TestKeeper()
+    dark_keeper_kwargs = build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw)
+    dark_keeper_kwargs['parser'] = MockParser()
+
+    return DarkKeeper(**dark_keeper_kwargs)
