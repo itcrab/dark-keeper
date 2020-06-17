@@ -14,7 +14,7 @@ class DarkKeeper(BaseDarkKeeper):
     """
     Dark Keeper is simple web-parser for podcast-sites.
     """
-    def __init__(self, http_client, parser, urls_storage, data_storage, export_mongo):
+    def __init__(self, http_client, parser, urls_storage, data_storage, export_mongo, setup_logging=True):
         self._validate_objects(http_client, parser, urls_storage, data_storage, export_mongo)
 
         self.http_client = http_client
@@ -22,6 +22,9 @@ class DarkKeeper(BaseDarkKeeper):
         self.urls_storage = urls_storage
         self.data_storage = data_storage
         self.export_mongo = export_mongo
+
+        if setup_logging:
+            self._setup_logging()
 
     def run(self):
         logger.info('Parsing is started.')
@@ -66,3 +69,15 @@ class DarkKeeper(BaseDarkKeeper):
         ]
         for check in objects:
             assert issubclass(*check), error_message.format(*check)
+
+    def _setup_logging(self):
+        config_kwargs = dict(
+            format=LOG_FORMAT,
+            datefmt=DATE_TIME_FORMAT,
+            level=logging.INFO,
+            handlers=[
+                logging.StreamHandler(),
+                MongoHandler(mongo_uri=f'{self.export_mongo.mongo_uri}_log'),
+            ],
+        )
+        logging.basicConfig(**config_kwargs)

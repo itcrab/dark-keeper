@@ -1,9 +1,6 @@
-import logging
-
 import pytest
 
-from dark_keeper import UrlsStorage, DataStorage, ExportMongo, HttpClient, LOG_FORMAT, DATE_TIME_FORMAT, MongoHandler, \
-    DarkKeeper
+from dark_keeper import UrlsStorage, DataStorage, ExportMongo, HttpClient, DarkKeeper
 from dark_keeper.base import BaseParser
 
 
@@ -38,30 +35,17 @@ def mongo_uri_raw():
 
 
 def build_kwargs_dark_keeper(base_url_raw, mongo_uri_raw):
-    base_url = base_url_raw
-    mongo_uri = mongo_uri_raw
-    http_client = HttpClient(
-        delay=0,
-        user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                   'AppleWebKit/537.36 (KHTML, like Gecko) '
-                   'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
+    return dict(
+        http_client=HttpClient(
+            delay=0,
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                       'AppleWebKit/537.36 (KHTML, like Gecko) '
+                       'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
+        ),
+        urls_storage=UrlsStorage(base_url=base_url_raw),
+        data_storage=DataStorage(),
+        export_mongo=ExportMongo(mongo_uri=mongo_uri_raw),
     )
-    urls_storage = UrlsStorage(base_url)
-    data_storage = DataStorage()
-    export_mongo = ExportMongo(mongo_uri)
-
-    config_kwargs = dict(
-        format=LOG_FORMAT,
-        datefmt=DATE_TIME_FORMAT,
-        level=logging.INFO,
-        handlers=[
-            logging.StreamHandler(),
-            MongoHandler(mongo_uri=f'{mongo_uri}_log'),
-        ],
-    )
-    logging.basicConfig(**config_kwargs)
-
-    return dict(http_client=http_client, urls_storage=urls_storage, data_storage=data_storage, export_mongo=export_mongo)
 
 
 def build_mock_parser():
