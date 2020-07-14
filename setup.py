@@ -14,9 +14,9 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         'cssselect==1.1.0',
-        'lxml==4.5.1',
+        'lxml==4.5.2',
         'pymongo==3.10.1',
-        'requests==2.23.0',
+        'requests==2.24.0',
     ],
     classifiers=[
         'Programming Language :: Python',
