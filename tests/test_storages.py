@@ -133,6 +133,40 @@ class TestUrlsStorage:
             'http://podcast-site.com/page/3',
         ]
 
+    def test_urls_storage_validation_blank_url(self):
+        base_url = ''
+        urls_storage = UrlsStorage(base_url)
+        assert urls_storage == []
+
+    def test_urls_storage_validation_wrong_url(self):
+        for base_url in ['wrong url', '123 456 789', 'test url for validation']:
+            urls_storage = UrlsStorage(base_url)
+            assert urls_storage == []
+
+    def test_urls_storage_validation_only_domain(self):
+        base_url = 'wrong-url.ru'
+        urls_storage = UrlsStorage(base_url)
+        assert urls_storage == []
+
+    def test_urls_storage_write_validation_blank_url(self):
+        base_url = 'http://podcast-site.com/'
+        urls_storage = UrlsStorage(base_url)
+        urls_storage.write('')
+        assert urls_storage == ['http://podcast-site.com/']
+
+    def test_urls_storage_write_validation_wrong_url(self):
+        base_url = 'http://podcast-site.com/'
+        urls_storage = UrlsStorage(base_url)
+        for url in ['wrong url', '123 456 789', 'test url for validation']:
+            urls_storage.write(url)
+        assert urls_storage == ['http://podcast-site.com/']
+
+    def test_urls_storage_write_validation_only_domain(self):
+        base_url = 'http://podcast-site.com/'
+        urls_storage = UrlsStorage(base_url)
+        urls_storage.write('wrong-url.ru')
+        assert urls_storage == ['http://podcast-site.com/']
+
 
 class TestDataStorage:
     def test_data_storage(self):
