@@ -2,12 +2,8 @@
 [![codecov](https://codecov.io/gh/itcrab/dark-keeper/branch/master/graph/badge.svg)](https://codecov.io/gh/itcrab/dark-keeper)
 
 # Dark Keeper
-Dark Keeper is open source simple web-parser for podcast-sites.
-
-# Goal idea
-I like listen IT-podcasts and learn something new.<br />
-For really good podcasts I want download all episodes.<br />
-Goal idea is create simple tool for this.
+Dark Keeper is open source simple web-parser for podcast-sites. Also you can use it for any sites.<br />
+Goal idea: parsing full information per each podcast episodes like number, description and download link.
 
 # Features
 - [x] simple web-spider walking on site

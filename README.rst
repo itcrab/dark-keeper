@@ -3,14 +3,9 @@
 Dark Keeper
 ===========
 
-Dark Keeper is open source simple web-parser for podcast-sites.
+Dark Keeper is open source simple web-parser for podcast-sites. Also you can use it for any sites.
 
-Goal idea
-=========
-
-I like listen IT-podcasts and learn something new. For really good
-podcasts I want download all episodes. Goal idea is create simple tool
-for this.
+Goal idea: parsing full information per each podcast episodes like number, description and download link.
 
 Features
 ========
