@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='dark-keeper',
-    version='0.2.7',
+    version='0.3.0',
     packages=['dark_keeper'],
     url='https://github.com/itcrab/dark-keeper',
     license='MIT License',
@@ -13,17 +13,16 @@ setup(
     description='Dark Keeper is open source simple web-parser for podcast-sites',
     long_description=open('README.rst').read(),
     install_requires=[
-        'cssselect',
-        'lxml',
-        'pymongo',
-        'requests',
+        'cssselect==1.1.0',
+        'lxml==4.5.2',
+        'pymongo==3.10.1',
+        'requests==2.24.0',
     ],
     classifiers=[
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
         'License :: OSI Approved :: MIT License',
         'Development Status :: 5 - Production/Stable',

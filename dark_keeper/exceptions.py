@@ -10,6 +10,10 @@ class DarkKeeperCacheReadError(DarkKeeperCacheError):
     pass
 
 
+class DarkKeeperCacheWriteError(DarkKeeperCacheError):
+    pass
+
+
 class DarkKeeperParseError(DarkKeeperError):
     pass
 
@@ -23,4 +27,12 @@ class DarkKeeperRequestError(DarkKeeperError):
 
 
 class DarkKeeperRequestResponseError(DarkKeeperRequestError):
+    pass
+
+
+class DarkKeeperMongoError(DarkKeeperError):
+    pass
+
+
+class DarkKeeperParseUriMongoError(DarkKeeperMongoError):
     pass

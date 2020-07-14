@@ -3,14 +3,9 @@
 Dark Keeper
 ===========
 
-Dark Keeper is open source simple web-parser for podcast-sites.
+Dark Keeper is open source simple web-parser for podcast-sites. Also you can use it for any sites.
 
-Goal idea
-=========
-
-I like listen IT-podcasts and learn something new. For really good
-podcasts I want download all episodes. Goal idea is create simple tool
-for this.
+Goal idea: parsing full information per each podcast episodes like number, description and download link.
 
 Features
 ========
@@ -29,34 +24,45 @@ Quick start
 
 ``(keeper)$ cat app.py``
 
-.. code:: python
+.. code-block:: python
 
-    from collections import OrderedDict
-
-    from dark_keeper import DarkKeeper
+    from dark_keeper import BaseParser, DarkKeeper, HttpClient, UrlsStorage, DataStorage, ExportMongo
 
 
-    class PodcastKeeper(DarkKeeper):
-        base_url = 'https://radio-t.com/archives/'
-        mongo_uri = 'mongodb://localhost/podcasts/radio-t.com'
-
+    class PodcastParser(BaseParser):
         def parse_urls(self, content):
-            urls = content.parse_urls('#blog-archives h1 a', self.base_url)
+            urls = content.parse_urls('.posts-list > .container-fluid .text-left a')
 
             return urls
 
         def parse_data(self, content):
-            data = OrderedDict()
-            data['title'] = content.parse_text('.hentry .entry-title')
-            data['desc'] = content.parse_text('.hentry .entry-content')
-            data['mp3'] = content.parse_attr('.hentry audio', 'src')
+            data = []
+            for post_item in content.get_block_items('.posts-list .posts-list-item'):
+                post_data = dict(
+                    title=post_item.parse_text('.number-title'),
+                    desc=post_item.parse_text('.post-podcast-content'),
+                    mp3=post_item.parse_attr('.post-podcast-content audio', 'src'),
+                )
 
-            if data['title'] and data['mp3']:
-                return data
+                if post_data['title'] and post_data['mp3']:
+                    data.append(post_data)
+
+            return data
 
 
     if __name__ == '__main__':
-        pk = PodcastKeeper()
+        pk = DarkKeeper(
+            http_client=HttpClient(
+                delay=2,
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                           'AppleWebKit/537.36 (KHTML, like Gecko) '
+                           'Chrome/81.0.4044.138 Safari/537.36 OPR/68.0.3618.125',
+            ),
+            parser=PodcastParser(),
+            urls_storage=UrlsStorage(base_url='https://radio-t.com/'),
+            data_storage=DataStorage(),
+            export_mongo=ExportMongo(mongo_uri='mongodb://localhost/podcasts.radio-t.com'),
+        )
         pk.run()
 
 .. |Build Status| image:: https://travis-ci.org/itcrab/dark-keeper.svg?branch=master

@@ -1,33 +1,44 @@
-from collections import OrderedDict
+from urllib.parse import urljoin
 
-from dark_keeper.content import Content
-from dark_keeper.mongo import LogMongo, ExportMongo, get_mongo_collection
-from dark_keeper.storages import DataStorage
+from dark_keeper import ExportMongo
+from dark_keeper.mongo import get_mongo_collection
+from tests.fixtures import mongo_uri_raw
 
 
-class TestExports:
-    def test_exports(self, tmpdir, html_mock):
-        data_storage = DataStorage()
+class TestExportMongo:
+    @classmethod
+    def setup_class(cls):
+        cls.mongo_coll = get_mongo_collection(mongo_uri_raw())
 
-        content = Content()
-        content.set_content(html_mock)
+    def teardown_method(self, method):
+        if self.mongo_coll.count_documents(filter={}):
+            self.mongo_coll.drop()
 
-        data = OrderedDict()
-        data['title'] = content.parse_text('.show-episode-page h1')
-        data['desc'] = content.parse_text('.large-content-text')
-        data['mp3'] = content.parse_attr('.episode-buttons a[href$=".mp3"]', 'href')
+    def test_export_mongo(self, mongo_uri, base_url):
+        logs_count = self.mongo_coll.count_documents(filter={})
+        assert logs_count == 0
 
-        data_storage.write(data)
+        export_data = [dict(title='Title', desc='Description', mp3=urljoin(base_url, '/media/podcast_1.mp3'))]
+        export_mongo = ExportMongo(mongo_uri)
+        export_mongo.export(export_data)
 
-        mongo_uri = 'mongodb://localhost/podcasts_tests/{}'.format(tmpdir.basename)
-        log_mongo = LogMongo(mongo_uri)
+        logs_count = self.mongo_coll.count_documents(filter={})
+        assert logs_count == 1
 
-        mongo_export = ExportMongo(mongo_uri)
-        mongo_export.export(data_storage, log_mongo)
+        mongo_data = self.mongo_coll.find_one()
+        assert mongo_data == export_data[0]
 
-        coll = get_mongo_collection(mongo_uri)
+    def test_export_mongo_two_calls(self, mongo_uri, base_url):
+        logs_count = self.mongo_coll.count_documents(filter={})
+        assert logs_count == 0
 
-        data = coll.find_one()
-        data.pop('_id', None)
+        export_data = [dict(title='Title', desc='Description', mp3=urljoin(base_url, '/media/podcast_1.mp3'))]
+        export_mongo = ExportMongo(mongo_uri)
+        export_mongo.export(export_data)
+        export_mongo.export(export_data)
 
-        assert {'desc': 'desc one', 'mp3': '/mp3/podcast_0.mp3', 'title': 'title one'} == data
+        logs_count = self.mongo_coll.count_documents(filter={})
+        assert logs_count == 1
+
+        mongo_data = self.mongo_coll.find_one()
+        assert mongo_data == export_data[0]

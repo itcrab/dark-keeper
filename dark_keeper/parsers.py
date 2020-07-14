@@ -1,31 +1,28 @@
 import lxml.html
 
 from .exceptions import DarkKeeperParseContentError
-from .request import Request
 
 
-class Content:
-    content = None
+class ContentParser:
+    def __init__(self, data, base_url):
+        self.base_url = base_url
 
-    def get_content(self):
-        return self.content
+        if isinstance(data, bytes):
+            try:
+                self.content = lxml.html.fromstring(data, base_url)
+                self.content.make_links_absolute()
+            except Exception as e:
+                raise DarkKeeperParseContentError(e)
+        elif isinstance(data, lxml.html.HtmlElement):
+            self.content = data
 
-    def set_content(self, html):
-        try:
-            self.content = lxml.html.fromstring(html)
-        except Exception as e:
-            raise DarkKeeperParseContentError(e)
-
-    def parse_urls(self, css_selector, base_url):
-        start_url = Request.calculate_start_url(base_url)
-
+    def parse_urls(self, css_selector):
         urls = []
         for link in self.content.cssselect(css_selector):
             url = link.get('href')
             if not url:
                 continue
 
-            url = Request.normalize_url(url, start_url)
             if url not in urls:
                 urls.append(url)
 
@@ -46,3 +43,10 @@ class Content:
         attr = tags[0].get(css_attr)
         if attr:
             return attr.strip()
+
+    def get_block_items(self, css_selector):
+        block_items = []
+        for item in self.content.cssselect(css_selector):
+            block_items.append(ContentParser(item, self.base_url))
+
+        return block_items

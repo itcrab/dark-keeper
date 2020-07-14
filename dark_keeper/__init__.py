@@ -1,55 +1,83 @@
-from .content import Content
-from .mongo import ExportMongo, LogMongo
-from .request import Request
+import logging
+
+from .base import BaseDarkKeeper, BaseHttpClient, BaseParser, BaseUrlsStorage, BaseDataStorage, BaseExportMongo
+from .exports import ExportMongo
+from .handlers import DATE_TIME_FORMAT, MongoHandler, LOG_FORMAT
+from .http import HttpClient
+from .parsers import ContentParser
 from .storages import UrlsStorage, DataStorage
 
+logger = logging.getLogger(__name__)
 
-class DarkKeeper:
+
+class DarkKeeper(BaseDarkKeeper):
     """
     Dark Keeper is simple web-parser for podcast-sites.
     """
-    base_url = None
-    mongo_uri = None
+    def __init__(self, http_client, parser, urls_storage, data_storage, export_mongo, setup_logging=True):
+        self._validate_objects(http_client, parser, urls_storage, data_storage, export_mongo)
 
-    def __init__(self):
-        self.urls_storage = UrlsStorage(self.base_url)
-        self.data_storage = DataStorage()
-        self.export_mongo = ExportMongo(self.mongo_uri)
-        self.log_mongo = LogMongo(self.mongo_uri)
-        self.request = Request(
-            delay=[1, 2],
-            user_agent='Mozilla/5.0 (Windows NT 10.0; WOW64) '
-                       'AppleWebKit/537.36 (KHTML, like Gecko) '
-                       'Chrome/61.0.3163.91 Safari/537.36 OPR/48.0.2685.32'
-        )
-        self.content = Content()
+        self.http_client = http_client
+        self.parser = parser
+        self.urls_storage = urls_storage
+        self.data_storage = data_storage
+        self.export_mongo = export_mongo
+
+        if setup_logging:
+            self._setup_logging()
 
     def run(self):
-        self.log_mongo.info('Parsing is started.')
+        logger.info('Parsing is started.')
 
-        for index, url in enumerate(self.urls_storage):
-            self.log_mongo.info('link #{index}: {url}'.format(
-                index=index, url=url
-            ))
+        for index, from_url in enumerate(self.urls_storage, start=1):
+            logger.info('link #%s: %s', index, from_url)
 
-            html = self.request.receive_html(url)
-            self.content.set_content(html)
-
-            urls = self.parse_urls(self.content)
-            self.urls_storage.write(urls)
-
-            data = self.parse_data(self.content)
-            self.data_storage.write(data)
-
-        self.log_mongo.info('Parsing is finished.')
+            content = self.build_content_from_url(from_url, self.urls_storage[0])
+            self.write_mew_urls(content)
+            self.write_new_data(content)
 
         self.export_data(self.data_storage)
 
-    def parse_urls(self, content):
-        raise NotImplementedError('You must implemented "parse_urls" method!')
+        logger.info('Parsing is finished.')
 
-    def parse_data(self, content):
-        raise NotImplementedError('You must implemented "parse_data" method!')
+    def build_content_from_url(self, from_url, base_url):
+        html = self.http_client.get(from_url)
+        content = ContentParser(html, base_url)
+
+        return content
+
+    def write_mew_urls(self, content):
+        urls = self.parser.parse_urls(content)
+        self.urls_storage.write(urls)
+
+    def write_new_data(self, content):
+        data = self.parser.parse_data(content)
+        self.data_storage.write(data)
 
     def export_data(self, data):
-        self.export_mongo.export(data, self.log_mongo)
+        self.export_mongo.export(data)
+
+    def _validate_objects(self, http_client, parser, urls_storage, data_storage, export_mongo):
+        error_message = 'Class `{}` is not based on `{}`'
+
+        objects = [
+            (type(http_client), BaseHttpClient),
+            (type(parser), BaseParser),
+            (type(urls_storage), BaseUrlsStorage),
+            (type(data_storage), BaseDataStorage),
+            (type(export_mongo), BaseExportMongo),
+        ]
+        for check in objects:
+            assert issubclass(*check), error_message.format(*check)
+
+    def _setup_logging(self):
+        config_kwargs = dict(
+            format=LOG_FORMAT,
+            datefmt=DATE_TIME_FORMAT,
+            level=logging.INFO,
+            handlers=[
+                logging.StreamHandler(),
+                MongoHandler(mongo_uri=f'{self.export_mongo.mongo_uri}_log'),
+            ],
+        )
+        logging.basicConfig(**config_kwargs)
