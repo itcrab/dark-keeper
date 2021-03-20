@@ -19,15 +19,15 @@ class TestUtils:
 
     def test_get_mongo_collection_blank_mongo_uri(self):
         with pytest.raises(DarkKeeperParseUriMongoError) as e:
-            mongo_collection = get_mongo_collection('')
+            get_mongo_collection('')
         assert str(e.value) == 'Invalid URI scheme: URI must begin with \'mongodb://\' or \'mongodb+srv://\''
 
     def test_get_mongo_collection_wrong_mongo_uri(self):
         with pytest.raises(DarkKeeperParseUriMongoError) as e:
-            mongo_collection = get_mongo_collection('wrong_url')
+            get_mongo_collection('wrong_url')
         assert str(e.value) == 'Invalid URI scheme: URI must begin with \'mongodb://\' or \'mongodb+srv://\''
 
     def test_get_mongo_collection_wrong_mongo_slashes(self):
         with pytest.raises(DarkKeeperParseUriMongoError) as e:
-            mongo_collection = get_mongo_collection('wrong//url')
+            get_mongo_collection('wrong//url')
         assert str(e.value) == 'Invalid URI scheme: URI must begin with \'mongodb://\' or \'mongodb+srv://\''

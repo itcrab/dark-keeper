@@ -1,7 +1,10 @@
 import pytest
 
-from dark_keeper import UrlsStorage, DataStorage, ExportMongo, HttpClient, DarkKeeper
+from dark_keeper import DarkKeeper
 from dark_keeper.base import BaseParser
+from dark_keeper.exports import ExportMongo
+from dark_keeper.http import HttpClient
+from dark_keeper.storages import UrlsStorage, DataStorage
 
 
 @pytest.fixture

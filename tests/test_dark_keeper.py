@@ -79,6 +79,6 @@ class TestDarkKeeper:
 
     def test_dark_keeper_without_all_arguments(self):
         with pytest.raises(TypeError) as e:
-            dk = DarkKeeper()
+            DarkKeeper()
         assert str(e.value) == "__init__() missing 5 required positional arguments: " \
                                "'http_client', 'parser', 'urls_storage', 'data_storage', and 'export_mongo'"

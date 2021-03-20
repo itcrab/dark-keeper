@@ -1,6 +1,6 @@
 from urllib.parse import urljoin
 
-from dark_keeper import ExportMongo
+from dark_keeper.exports import ExportMongo
 from dark_keeper.mongo import get_mongo_collection
 from tests.fixtures import mongo_uri_raw
 
