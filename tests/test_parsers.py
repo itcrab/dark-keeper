@@ -16,7 +16,7 @@ class TestContentParser:
     def test_content_parser_html_exception(self, podcasts_page_1_html, base_url, monkeypatch):
         monkeypatch.setattr(lxml.html, 'fromstring', raise_exception)
         with pytest.raises(DarkKeeperParseContentError) as e:
-            content = ContentParser(podcasts_page_1_html, base_url)
+            ContentParser(podcasts_page_1_html, base_url)
         assert str(e.value) == 'Exception error.'
 
     def test_content_parser_html_element(self, podcasts_page_1_html, base_url):
@@ -85,7 +85,7 @@ class TestContentParser:
         }, {
             'card-header': 'Podcast 2 Title',
             'card-body': 'Podcast 2 Themes\n                Podcast 2 Description.\n                podcast_2.mp3',
-        },{
+        }, {
             'card-header': 'Podcast 3 Title',
             'card-body': 'Podcast 3 Themes\n                Podcast 3 Description.\n                podcast_3.mp3',
         }]

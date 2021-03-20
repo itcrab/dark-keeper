@@ -11,7 +11,7 @@ class TestUrlsStorage:
 
     def test_urls_storage_no_base_url(self):
         with pytest.raises(TypeError) as e:
-            urls_storage = UrlsStorage()
+            UrlsStorage()
         assert str(e.value) == '__init__() missing 1 required positional argument: \'base_url\''
 
     def test_urls_storage_write_new_urls(self):

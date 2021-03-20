@@ -5,8 +5,8 @@ import pytest
 import requests
 from requests.exceptions import Timeout
 
-from dark_keeper import HttpClient
 from dark_keeper.exceptions import DarkKeeperRequestResponseError, DarkKeeperCacheReadError, DarkKeeperCacheWriteError
+from dark_keeper.http import HttpClient
 from tests.fixtures import raise_exception
 
 
