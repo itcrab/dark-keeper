@@ -1,4 +1,4 @@
-|Build Status| |Coverage Status|
+|Build Status|
 
 Dark Keeper
 ===========
@@ -65,7 +65,5 @@ Quick start
         )
         pk.run()
 
-.. |Build Status| image:: https://travis-ci.org/itcrab/dark-keeper.svg?branch=master
-    :target: https://travis-ci.org/itcrab/dark-keeper
-.. |Coverage Status| image:: https://codecov.io/gh/itcrab/dark-keeper/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/itcrab/dark-keeper
+.. |Build Status| image:: https://github.com/itcrab/dark-keeper/actions/workflows/python-package.yml/badge.svg
+    :target: https://github.com/itcrab/dark-keeper
