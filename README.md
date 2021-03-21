@@ -15,7 +15,10 @@ Goal idea: parsing full information per each podcast episodes like number, descr
 `(keeper)$ pip install dark-keeper`<br />
 `(keeper)$ cat app.py`
 ```Python
-from dark_keeper import BaseParser, DarkKeeper, HttpClient, UrlsStorage, DataStorage, ExportMongo
+from dark_keeper import BaseParser, DarkKeeper
+from dark_keeper.exports import ExportMongo
+from dark_keeper.http import HttpClient
+from dark_keeper.storages import UrlsStorage, DataStorage
 
 
 class PodcastParser(BaseParser):
